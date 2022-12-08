@@ -1,5 +1,5 @@
-# tic-tac-toe-two
-Tic Tac Toe Two is a fun game to play with a friend! It's tic tac toe with pattern matching and a fun, interactive art style.
+# fruits-and-friends
+Fruits and Friends is a fun game to play with a friend! It's a tile placement game with pattern matching and an interactive art style.
 
 ## Team Members
 
