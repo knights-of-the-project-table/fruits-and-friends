@@ -56,7 +56,7 @@
 - What hours will you be available to communicate?
 
   - Jeremy:
-     - Slack messages: Outside of 8am - 4pm CST (weekdays), nearly all the day Sat/Sun
+    - Slack messages: Outside of 8am - 4pm CST (weekdays), nearly all the day Sat/Sun
     - Online: 6pm CST (weekdays), all day Saturday
   - Araceli:
     - Slack messages:6pm EST (weekdays), from 12pm EST Sat/ until 6pm EST Sun
@@ -142,4 +142,3 @@ If so, consider:
 - How will you communicate that it’s time to merge?
 
   Through Slack.
-  
