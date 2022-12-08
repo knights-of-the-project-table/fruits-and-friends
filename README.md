@@ -3,8 +3,8 @@ Tic Tac Toe Two is a fun game to play with a friend! It's tic tac toe with patte
 
 ## Team Members
 
-- Matt Austin
-- Danner Taylor 
-- Hannah Hwang
 - Jeremy Adamson
-- Araceli Garcia Martinez
+- Matt Austin
+- Hannah Hwang
+- Araceli García Martínez
+- Danner Taylor 
