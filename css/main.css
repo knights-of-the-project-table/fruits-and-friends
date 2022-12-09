@@ -1,0 +1,45 @@
+/* Table of Content
+==================================================
+	- Google fonts & font family -
+	- Typography -
+  - Color Palette -
+  - General -
+  - XXX -
+*/
+
+/* Google fonts & font family
+==================================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
+
+/*
+Headings/Titles/Game text
+font-family: 'Luckiest Guy', cursive;
+
+Rules/biographical text/normal text
+font-family: 'Roboto', sans-serif;
+*/
+
+/* Typography
+==================================================*/
+
+html {
+  font-size: 16px;
+}
+
+/* Color Palette;
+==================================================*/ 
+
+/* Source: https://coolors.co/palette/d88c9a-f2d0a9-f1e3d3-99c1b9-8e7dbe
+
+#D88C9A;
+#F2D0A9;
+#F1E3D3;
+#99C1B9;
+#8E7DBE;
+
+*/
+
+/* General;
+==================================================*/
+
