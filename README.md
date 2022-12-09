@@ -34,6 +34,10 @@ The first player to achieve a victory condition wins the game!
 
 ![About Us page wireframe](img/About-Us-Page.jpg)
 
+## Project Management
+
+[Location of Project Management Board](https://github.com/orgs/knights-of-the-project-table/projects/1)
+
 ## Domain Model
 
 ![Domain Model of Fruits and Friends](img/Domain-Model.png)
