@@ -17,13 +17,13 @@
     </div>
     <header>
         <h1>Fruits & Friends</h1>
-        <nav>
+        <nav id="navBar">
             <a href="\">Home</a>
             <a href="\">About Us</a>
         </nav>
-        <nav>
-            <a href="\">2 Player Game</a>
-            <a href="\">Play Against the Machine</a>
+        <nav id="gameOptions">
+            <button id="playerGameButton">2 Player Game</button>
+            <button id="playMachine">Play Against the Machine</button>
         </nav>
     </header>
     <main>
@@ -45,11 +45,11 @@
             </div>
         </div>
         <!-- display game status -->
-        <div>
+        <div id="gameStatusContainer">
             <p id="gameStatus"></p>
         </div>
         <!-- display Removed Tile -->
-        <div>
+        <div id="removedTileContainer">
             <img id="removedTile">
         </div>
         <!-- display player icon -->
@@ -83,7 +83,7 @@
                 <h3>Player 2</h3>
             </div>
         </section>
-        <button>Reset Game</button>
+        <button id="resetButton">Reset Game</button>
     </main>
     <footer>
 
