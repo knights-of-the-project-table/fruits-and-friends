@@ -16,7 +16,7 @@
 
 - In which professional competencies do you each want to develop greater strength?
 
-  On a case by case basis, each person who wants to develop in certain areas can pair together with someone more experienced/comfortable on certain features in an effort to develop their skills.
+  On a case-by-case basis, each person who wants to develop in certain areas can pair together with someone more experienced/comfortable on certain features in an effort to develop their skills.
 
 - Knowing that every person in your team needs to understand all aspects of the project, how do you plan to approach the day-to-day work?
 
@@ -25,7 +25,7 @@
   - Expected completion
   - Help needed
   
-- Break off into differen tables to perform daily work
+- Break off into different tables to perform daily work
 
 ## Conflict Plan
 
@@ -41,7 +41,7 @@
   
 - How will you approach each other and the challenges of the project knowing that it is impossible for all members to be at the exact same place in understanding and skill level?
 
-  Give each other grace, and solidify your learning if you have to help someone else learn a concept or feature.
+  Give each other grace and consider it an opportunity to solidify your learning by helping someone else learn a concept or feature.
 
 - How will you raise concerns to members who are not adequately contributing?
 
@@ -56,17 +56,17 @@
 - What hours will you be available to communicate?
 
   - Jeremy:
-     - Slack messages: Outside of 8am - 4pm CST (weekdays), nearly all the day Sat/Sun
+    - Slack messages: Outside of 8am - 4pm CST (weekdays), nearly all the day Sat/Sun
     - Online: 6pm CST (weekdays), all day Saturday
   - Araceli:
     - Slack messages:6pm EST (weekdays), from 12pm EST Sat/ until 6pm EST Sun
     - Online: 6pm EST, from 12pm EST Sat/ until 6pm EST Su
     - 12/16 unavailable
   - Matt:
-    - Slack messages: sporatic availability (work 6:30am - 2:30pm PST), weekends all day (except 12pm -3pm PST Sunday)
+    - Slack messages: sporadic availability (work 6:30am - 2:30pm PST), weekends all day (except 12pm -3pm PST Sunday)
     - Online: after 5pm PST weekdays, weekends all day (except 12pm -3pm PST Sunday)
   - Danner:
-    - Slack messages: sporatic availability (work 8:30am - 7pm EST), weekends 11am - 3pm EST, 9pm - 1am EST
+    - Slack messages: sporadic availability (work 8:30am - 7pm EST), weekends 11am - 3pm EST, 9pm - 1am EST
     - Online: 8pm - 12pm EST
     - Unavailable 12/16 (4pm - 8:30pm EST), 12/17
   - Hannah:
@@ -142,4 +142,3 @@ If so, consider:
 - How will you communicate that it’s time to merge?
 
   Through Slack.
-  
