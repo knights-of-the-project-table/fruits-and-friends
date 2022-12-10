@@ -57,7 +57,9 @@ gameTiles.forEach((gameTile, i) => {
   gameBoard[row][column].button = gameTile;
   // Before the game starts, each button is disabled
   gameTile.disabled = true;
-  gameTile.addEventListener('click', makeMove(row, column));
+  gameTile.addEventListener('click', () => {
+    makeMove(row, column);
+  });
 });
 
 // Loads previous save state (if any) and starts the game
@@ -65,7 +67,7 @@ function gameStart(){
 
   // Three objects loaded from saved state: Board, availableMoves[], current tile
   initializeMoves();
-
+  setCurrentPlayerStatus();
   enableAvailableTiles();
 }
 
@@ -83,11 +85,12 @@ function initializeMoves(){
 // Event Handler for clicking on a tile
 function makeMove(row, column) {
   gameBoard[row][column].occupiedBy = currentPlayer;
-
-  updateAvailableMoves();
+  let fruit = gameBoard[row][column].fruit;
+  let friend = gameBoard[row][column].friend;
+  updateAvailableMoves(fruit, friend);
   enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image  
+  // TODO: add function that replaces tile image with token image
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
@@ -101,10 +104,8 @@ function makeMove(row, column) {
 }
 
 // Updates the availableMoves array with the next set of valid moves
-function updateAvailableMoves(){
+function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
-  let fruit = gameBoard[row][column].fruit;
-  let friend = gameBoard[row][column].friend;
 
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
