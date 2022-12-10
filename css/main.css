@@ -42,3 +42,8 @@ html {
 
 /* General;
 ==================================================*/
+
+.gameTile:enabled {
+  border: 5px solid red;
+}
+
