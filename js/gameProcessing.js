@@ -60,18 +60,22 @@ gameTiles.forEach((gameTile, i) => {
   gameBoard[row][column].button = gameTile;
   // Before the game starts, each button is disabled
   gameTile.disabled = true;
-  gameTile.addEventListener('click', makeMove);
+
   gameTile.id = i;
   let image = document.createElement('img');
   image.src = gameBoard[row][column].imageSrc;
   gameTile.appendChild(image);
+  gameTile.addEventListener('click', () => {
+    makeMove(row, column);
+  });
 });
 
 // Loads previous save state (if any) and starts the game
 function gameStart(){
-  console.log(5);
   // Three objects loaded from saved state: Board, availableMoves[], current tile
-  console.log(availableMoves);
+
+  initializeMoves();
+  setCurrentPlayerStatus();
   enableAvailableTiles();
 }
 
@@ -88,11 +92,11 @@ function initializeMoves(){
 }
 
 // Event Handler for clicking on a tile
-function makeMove(event) {
-  const idx = event.target.id;
-  linearGameBoard[idx].occupiedBy = currentPlayer;
-  console.log('move');
-  updateAvailableMoves(idx);
+function makeMove(row, column) {
+  gameBoard[row][column].occupiedBy = currentPlayer;
+  let fruit = gameBoard[row][column].fruit;
+  let friend = gameBoard[row][column].friend;
+  updateAvailableMoves(fruit, friend);
   enableAvailableTiles();
 
   // TODO: add function that replaces tile image with token image
@@ -109,10 +113,9 @@ function makeMove(event) {
 }
 
 // Updates the availableMoves array with the next set of valid moves
-function updateAvailableMoves(idx){
+function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
-  let fruit = linearGameBoard[idx].fruit;
-  let friend = linearGameBoard[idx].friend;
+
 
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
