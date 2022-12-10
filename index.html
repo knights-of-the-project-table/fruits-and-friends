@@ -12,33 +12,50 @@
 
 <body>
     <!-- content inside sidebar -->
-    <div id="sidebar">
+    <div id="mySidebar" class="sidebar">
         <h2>Game Rules</h2>
+        <a href="javascript:void(0)" class="closeButton" onclick="closeNav()">×</a>
         <p>explanation of game rules</p>
     </div>
     <header>
-        <h1>Fruits & Friends</h1>
-        <nav id="navBar">
-            <a href="\">Home</a>
-            <a href="\">About Us</a>
-        </nav>
-        <nav id="gameOptions">
-            <button id="playerGameButton">2 Player Game</button>
-            <button id="playMachine">Play Against the Machine</button>
-        </nav>
+        <section id="header1">
+            <section id="headerLogo">
+                <div id="asset1">
+                    <img class="img1" src="https://place-hold.it/150x150/ddd" />
+                </div>
+                <div class="heading">
+                    <h1>Fruits & Friends</h1>
+                </div>
+                <div class="asset2">
+                    <img class="img1" src="https://place-hold.it/150x150/ddd" />
+                </div>
+            </section>
+        </section>
+        <section>
+            <nav class="navbar">
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="aboutUs.html">About Us</a></li>
+                </ul>
+            </nav>
+        </section>
     </header>
     <main>
+        <nav id="gameOptions">
+            <button class="gameOptionButtons" id="playerGameButton">2 Player Game</button>
+            <button class="gameOptionButtons" id="playMachine">Play Against the Machine</button>
+        </nav>
         <!-- opens game rules sidebar -->
-        <button id="gameRules">&#9776; Game Rules</button>
+        <button class="openButton" onclick="openNav()">&#9776; Game Rules</button>
         <!-- display scoreboard -->
         <div id="scoreBoard">
-            <div id="playerOne">
+            <div class="playerScore">
                 <h2>P1</h2>
                 <div id="playerOneScore">
                     0
                 </div>
             </div>
-            <div id="playerTwo">
+            <div class="playerScore1">
                 <div id="playerTwoScore">
                     0
                 </div>
@@ -55,42 +72,32 @@
         </div>
         <!-- display player icon -->
         <section id="board">
-            <div>
-                <img src="https://place-hold.it/100x100/000/fff">
+            <div class="playerAvatar">
+                <img src="https://place-hold.it/150x150/000/fff">
                 <h3>Player 1</h3>
             </div>
 
-            <table role="grid">
-                <tbody>
-                    <tr>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                    </tr>
-                    <tr>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                    </tr>
-                    <tr>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                    </tr>
-                    <tr>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                        <td><button class='gameTile'></button></td>
-                    </tr>
-                </tbody>
-            </table>
+           <section id="grid">
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+            <button class='gameTile'></button>
+           </section>
 
-            <div>
-                <img src="https://place-hold.it/100x100/000/fff">
+            <div class="playerAvatar">
+                <img src="https://place-hold.it/150x150/000/fff">
                 <h3>Player 2</h3>
             </div>
         </section>
@@ -102,6 +109,7 @@
 
     <script src="js/gameArtifacts.js"></script>
     <script src="js/gameProcessing.js"></script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
