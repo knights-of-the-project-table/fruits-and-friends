@@ -63,7 +63,7 @@ gameTiles.forEach((gameTile, i) => {
 // Loads previous save state (if any) and starts the game
 function gameStart(){
 
-  // Three objects loaded from saved state: Board, availableMoves[], current tile 
+  // Three objects loaded from saved state: Board, availableMoves[], current tile
   initializeMoves();
 
   enableAvailableTiles();
@@ -79,8 +79,6 @@ function initializeMoves(){
     }
   }
 }
-
-
 
 // Event Handler for clicking on a tile
 function makeMove(row, column) {
@@ -98,7 +96,7 @@ function makeMove(row, column) {
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     setCurrentPlayerStatus();
   }
-  
+
   // TODO: add function to replace previous move image tile with current move image tile
 }
 
