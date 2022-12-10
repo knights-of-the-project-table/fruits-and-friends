@@ -12,7 +12,7 @@ The goal of the game is to achieve one of the following victory conditions:
 
 ## Tiles
 
-There are 16 tiles, and each is composed of 2 elemetns, one fruit (banana, orange, strawberry, watermelon) and one animal friend (dog, dragon, kangaroo, turtle). The tiles are randomly arranged in a 4x4 grid to form the game board.
+There are 16 tiles, and each is composed of 2 elements, one fruit (banana, orange, strawberry, watermelon) and one animal friend (dog, dragon, kangaroo, turtle). The tiles are randomly arranged in a 4x4 grid to form the game board.
 
 ## Game Play
 
