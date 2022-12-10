@@ -49,16 +49,13 @@ let availableMoves = [];
 let currentPlayer = 1;
 
 // Sets up the board
-const gameBoardObj = new GameBoard();
+const gameBoardObj = newGameBoard();
 const gameBoard = gameBoardObj.board;
 const linearGameBoard = gameBoardObj.linearBoard;
 
 // Sets up players
-let players = [];
-players.push(new PlayerData);
-players.push(new PlayerData);
-players[0].playerToken = 'img/assets/black-token.svg';
-players[1].playerToken = 'img/assets/red-token.svg';
+let playersObject = newPlayers();
+let players = playersObject.players;
 
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
@@ -93,7 +90,6 @@ function initializeMoves(){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
         availableMoves.push([i, j]);
-        console.log('hi');
       }
     }
   }
@@ -107,7 +103,7 @@ function makeMove(row, column) {
   updateAvailableMoves(fruit, friend);
   enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image
+  // Replaces tile image with token image
   let token = document.createElement('img');
   token.src = players[currentPlayer - 1].playerToken;
   token.className = 'tokenLayer';
@@ -147,7 +143,6 @@ function enableAvailableTiles(){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
     gameBoard[row][column].button.disabled = false;
-    console.log([row,column]);
   }
 }
 
