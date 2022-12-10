@@ -47,7 +47,6 @@ const gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
-initializeMoves();
 
 // Sets up the board
 const gameBoardObj = new GameBoard();
@@ -58,9 +57,8 @@ const linearGameBoard = gameBoardObj.linearBoard;
 let players = [];
 players.push(new PlayerData);
 players.push(new PlayerData);
-players[0].playerToken = "https://place-hold.it/100x100/000/fff";
-players[1].playerToken = "https://place-hold.it/100x100/000/fff";
-
+players[0].playerToken = 'img/assets/black-token.svg';
+players[1].playerToken = 'img/assets/red-token.svg';
 
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
@@ -72,6 +70,7 @@ gameTiles.forEach((gameTile, i) => {
 
   gameTile.id = i;
   let image = document.createElement('img');
+  image.className = 'tileLayer';
   image.src = gameBoard[row][column].imageSrc;
   gameTile.appendChild(image);
   gameTile.addEventListener('click', () => {
@@ -188,48 +187,4 @@ function setCurrentPlayerStatus() {
 // **** For Testing Only*****
 // **************************
 gameStart();
-
-
-// **************************
-// **** Extra Code*****
-// **************************
-
-// Valid Move Check
-// Input: Two element array for row and column
-// Output: Boolean value if the move was valid
-// function processMove(move){
-//   let row = move[0];
-//   let column = move[1];
-
-//   if (gameBoard[row][column].occupiedBy){
-//     return false;
-//   }
-
-//   let validMove = false;
-//   for (let i = 0; i < availableMoves.length; i++){
-//     if (availableMoves[i][0] === row && availableMoves[i][1] === column){
-//       validMove = true;
-//       break;
-//     }
-//   }
-//   if (!validMove){
-//     return false;
-//   }
-
-//   gameBoard[row][column].occupiedBy = currentPlayer;
-
-//   let newAvailableMoves = [];
-//   let fruit = gameBoard[row][column].fruit;
-//   let friend = gameBoard[row][column].friend;
-
-//   for (let i = 0; i < BOARD_WIDTH; i++){
-//     for (let j = 0; j < BOARD_WIDTH; j++){
-//       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
-//         newAvailableMoves.push([i, j]);
-//       }
-//     }
-//   }
-//   availableMoves = newAvailableMoves;
-//   return true;
-// }
 
