@@ -47,9 +47,12 @@ const gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
+initializeMoves();
 
 // Sets up the board
-const gameBoard = new GameBoard().board;
+const gameBoardObj = new GameBoard();
+const gameBoard = gameBoardObj.board;
+const linearGameBoard = gameBoardObj.linearBoard;
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
   const row = Math.floor(i / BOARD_WIDTH);
@@ -57,6 +60,11 @@ gameTiles.forEach((gameTile, i) => {
   gameBoard[row][column].button = gameTile;
   // Before the game starts, each button is disabled
   gameTile.disabled = true;
+
+  gameTile.id = i;
+  let image = document.createElement('img');
+  image.src = gameBoard[row][column].imageSrc;
+  gameTile.appendChild(image);
   gameTile.addEventListener('click', () => {
     makeMove(row, column);
   });
@@ -64,8 +72,8 @@ gameTiles.forEach((gameTile, i) => {
 
 // Loads previous save state (if any) and starts the game
 function gameStart(){
-
   // Three objects loaded from saved state: Board, availableMoves[], current tile
+
   initializeMoves();
   setCurrentPlayerStatus();
   enableAvailableTiles();
@@ -77,6 +85,7 @@ function initializeMoves(){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
         availableMoves.push([i, j]);
+        console.log('hi');
       }
     }
   }
@@ -107,6 +116,7 @@ function makeMove(row, column) {
 function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
 
+
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
@@ -124,7 +134,8 @@ function enableAvailableTiles(){
   for (let i = 0; i < availableMoves.length; i++){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
-    gameBoard[row][column].button.disabled = false;
+    // gameBoard[row][column].button.disabled = false;
+    console.log([row,column]);
   }
 }
 

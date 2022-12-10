@@ -4,6 +4,7 @@
 
 // BACKLOG: Update to have object literals for fruit options and friend options
 //          Update TAG #729
+const imageAssets = [['./img/assets/dog-banana.jpg', './img/assets/dragon-banana.jpg', './img/assets/kangaroo-banana.jpg', './img/assets/turtle-orange.jpg'], ['./img/assets/dog-orange.jpg', './img/assets/dragon-orange.jpg', './img/assets/kangaroo-orange.jpg', './img/assets/turtle-orange.jpg'], ['./img/assets/dog-strawberry.jpg', './img/assets/dragon-strawberry.jpg', './img/assets/kangaroo-strawberry.jpg', './img/assets/turtle-strawberry.jpg'], ['./img/assets/dog-watermelon.jpg', './img/assets/dragon-watermelon.jpg', './img/assets/kangaroo-watermelon.jpg', './img/assets/turtle-watermelon.jpg']];
 
 class GameBoard{
   constructor(){
@@ -30,7 +31,7 @@ class GameBoard{
     // TAG #729
     for (let i = 0; i < 4; i++){
       for (let j = 0; j < 4; j++){
-        let newTile = new GameboardTile(i, j);
+        let newTile = new GameboardTile(i, j, imageAssets[i][j]);
         tileDeck.push([position.pop(), newTile]);
       }
     }
@@ -55,11 +56,12 @@ class GameBoard{
 }
 
 class GameboardTile{
-  constructor(fruit, friend){
+  constructor(fruit, friend, imageSrc){
     this.fruit = fruit;
     this.friend = friend;
     this.occupiedBy = null;
     this.button = null;
+    this.imageSrc = imageSrc;
   }
 }
 
