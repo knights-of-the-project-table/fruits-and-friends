@@ -47,12 +47,16 @@ const gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
-initializeMoves();
 
 // Sets up the board
-const gameBoardObj = new GameBoard();
+const gameBoardObj = newGameBoard();
 const gameBoard = gameBoardObj.board;
 const linearGameBoard = gameBoardObj.linearBoard;
+
+// Sets up players
+let playersObject = newPlayers();
+let players = playersObject.players;
+
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
   const row = Math.floor(i / BOARD_WIDTH);
@@ -63,6 +67,7 @@ gameTiles.forEach((gameTile, i) => {
 
   gameTile.id = i;
   let image = document.createElement('img');
+  image.className = 'tileLayer';
   image.src = gameBoard[row][column].imageSrc;
   gameTile.appendChild(image);
   gameTile.addEventListener('click', () => {
@@ -85,7 +90,6 @@ function initializeMoves(){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
         availableMoves.push([i, j]);
-        console.log('hi');
       }
     }
   }
@@ -99,7 +103,11 @@ function makeMove(row, column) {
   updateAvailableMoves(fruit, friend);
   enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image
+  // Replaces tile image with token image
+  let token = document.createElement('img');
+  token.src = players[currentPlayer - 1].playerToken;
+  token.className = 'tokenLayer';
+  gameBoard[row][column].button.appendChild(token);
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
@@ -134,8 +142,7 @@ function enableAvailableTiles(){
   for (let i = 0; i < availableMoves.length; i++){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
-    // gameBoard[row][column].button.disabled = false;
-    console.log([row,column]);
+    gameBoard[row][column].button.disabled = false;
   }
 }
 
@@ -175,48 +182,4 @@ function setCurrentPlayerStatus() {
 // **** For Testing Only*****
 // **************************
 gameStart();
-
-
-// **************************
-// **** Extra Code*****
-// **************************
-
-// Valid Move Check
-// Input: Two element array for row and column
-// Output: Boolean value if the move was valid
-// function processMove(move){
-//   let row = move[0];
-//   let column = move[1];
-
-//   if (gameBoard[row][column].occupiedBy){
-//     return false;
-//   }
-
-//   let validMove = false;
-//   for (let i = 0; i < availableMoves.length; i++){
-//     if (availableMoves[i][0] === row && availableMoves[i][1] === column){
-//       validMove = true;
-//       break;
-//     }
-//   }
-//   if (!validMove){
-//     return false;
-//   }
-
-//   gameBoard[row][column].occupiedBy = currentPlayer;
-
-//   let newAvailableMoves = [];
-//   let fruit = gameBoard[row][column].fruit;
-//   let friend = gameBoard[row][column].friend;
-
-//   for (let i = 0; i < BOARD_WIDTH; i++){
-//     for (let j = 0; j < BOARD_WIDTH; j++){
-//       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
-//         newAvailableMoves.push([i, j]);
-//       }
-//     }
-//   }
-//   availableMoves = newAvailableMoves;
-//   return true;
-// }
 

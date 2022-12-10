@@ -4,7 +4,8 @@
 	- Typography -
   - Color Palette -
   - General -
-  - XXX -
+  - Nav Bar -
+  - Game Board -
 */
 
 /* Google fonts & font family
@@ -42,10 +43,6 @@ html {
 
 /* General;
 ==================================================*/
-
-.gameTile:enabled {
-  border: 5px solid red;
-}
 
 body {
   display: flex;
@@ -110,6 +107,48 @@ body {
     border-radius: 10%;
   }
 
+/* Nav Bar;
+==================================================*/
+  .sidebar  {
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    height: 550px;
+    top: 15%;
+    left: 0;
+    background-color: #99c1b9;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    border-radius: 10px;
+  }
+  
+  
+  .sidebar .closeButton {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+  }
+  
+  .openButton {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #99c1b9;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    position: absolute;
+    left: 15%;
+    top: ;
+  }
+  
+  .openButton:hover {
+    background-color:#444;
+  }
+  
+/* Game Board;
+==================================================*/
 #gameOptions {
   display: flex;
   justify-content: center;
@@ -165,46 +204,30 @@ body {
   margin: 5rem;
 }
 
+.gameTile {
+  position: relative;
+  border: 0;
+  padding: 0;
+  margin: 0.75rem;
+}
 
+.gameTile:enabled {
+  border: 0.5rem solid red;
+  margin: 0.25rem;
+}
 
+.tileLayer {
+  position: relative;
+}
 
-
-  /* navbar */
-
-  .sidebar  {
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    height: 550px;
-    top: 15%;
-    left: 0;
-    background-color: #99c1b9;
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding-top: 60px;
-    border-radius: 10px;
-  }
-  
-  
-  .sidebar .closeButton {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-  }
-  
-  .openButton {
-    font-size: 20px;
-    cursor: pointer;
-    background-color: #99c1b9;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 10px;
-    position: absolute;
-    left: 15%;
-    top: ;
-  }
-  
-  .openButton:hover {
-    background-color:#444;
-  }
+.tokenLayer {
+  position: absolute;
+  z-index: 3;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+}
