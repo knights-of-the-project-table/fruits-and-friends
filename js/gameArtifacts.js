@@ -52,6 +52,7 @@ class GameboardTile{
     this.fruit = fruit;
     this.friend = friend;
     this.occupiedBy = null;
+    this.button = null;
   }
 }
 
