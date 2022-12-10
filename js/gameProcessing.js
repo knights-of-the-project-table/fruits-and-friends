@@ -4,7 +4,7 @@ const BOARD_WIDTH = 4;
 const WIN_CONDITIONS = [
   // first row
   [[0, 0], [0, 1], [0, 2], [0, 3]],
-  // second row row
+  // second row
   [[1, 0], [1, 1], [1, 2], [1, 3]],
   // third row
   [[2, 0], [2, 1], [2, 2], [2, 3]],
@@ -44,15 +44,29 @@ const WIN_CONDITIONS = [
 
 const gameStatus = document.getElementById('gameStatus');
 const gameTiles = document.querySelectorAll('.gameTile');
-const gameBoard = new GameBoard().board;
 
 let availableMoves = [];
 let currentPlayer = 1;
 
-// Main Game Processing
-function gameProcess(){
+// Sets up the board
+const gameBoard = new GameBoard().board;
+// Add each gameTile html element to the game board and create Event Handler
+gameTiles.forEach((gameTile, i) => {
+  const row = Math.floor(i / BOARD_WIDTH);
+  const column = i % BOARD_WIDTH;
+  gameBoard[row][column].button = gameTile;
+  // Before the game starts, each button is disabled
+  gameTile.disabled = true;
+  gameTile.addEventListener('click', makeMove(row, column));
+});
+
+// Loads previous save state (if any) and starts the game
+function gameStart(){
+
+  // Three objects loaded from saved state: Board, availableMoves[], current tile 
   initializeMoves();
 
+  enableAvailableTiles();
 }
 
 // Populates the array of allowed moves for game start, i.e., only the outer border of tiles are valid placements for a token
@@ -66,32 +80,52 @@ function initializeMoves(){
   }
 }
 
-// Add each gameTile html element to the game board and create Event Handler
-gameTiles.forEach((gameTile, i) => {
-  const row = Math.floor(i / BOARD_WIDTH);
-  const column = i % BOARD_WIDTH;
-  gameBoard[row][column].button = gameTile;
-  // Before the game starts, each button is disabled
-  gameTile.disabled = true;
-  gameTile.addEventListener('click', makeMove(row, column));
-});
+
 
 // Event Handler for clicking on a tile
 function makeMove(row, column) {
   gameBoard[row][column].occupiedBy = currentPlayer;
 
-  // TODO: add function that processes valid moves by enabling tiles using the availableMoves array
+  updateAvailableMoves();
+  enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image
-
-  // TODO: add function to replace previous move image tile with current move image tile
+  // TODO: add function that replaces tile image with token image  
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
-    endGame();
+    disableTiles();
   } else {
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     setCurrentPlayerStatus();
+  }
+  
+  // TODO: add function to replace previous move image tile with current move image tile
+}
+
+// Updates the availableMoves array with the next set of valid moves
+function updateAvailableMoves(){
+  let newAvailableMoves = [];
+  let fruit = gameBoard[row][column].fruit;
+  let friend = gameBoard[row][column].friend;
+
+  for (let i = 0; i < BOARD_WIDTH; i++){
+    for (let j = 0; j < BOARD_WIDTH; j++){
+      if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
+        newAvailableMoves.push([i, j]);
+      }
+    }
+  }
+  availableMoves = newAvailableMoves;
+}
+
+// Enables game tiles based upon the moves which will be available for the following turn
+function enableAvailableTiles(){
+  disableTiles();
+
+  for (let i = 0; i < availableMoves.length; i++){
+    let row = availableMoves[i][0];
+    let column = availableMoves[i][1];
+    gameBoard[row][column].button.disabled = false;
   }
 }
 
@@ -113,7 +147,7 @@ function evaluateWin(){
   });
 }
 
-function endGame() {
+function disableTiles() {
   gameTiles.forEach(gameTile => {
     gameTile.disabled = true;
   });
@@ -123,49 +157,56 @@ function setCurrentPlayerStatus() {
   gameStatus.innerText = `Player ${currentPlayer}'s Turn`;
 }
 
-// Valid Move Check
-// Input: Two element array for row and column
-// Output: Boolean value if the move was valid
-function processMove(move){
-  let row = move[0];
-  let column = move[1];
 
-  if (gameBoard[row][column].occupiedBy){
-    return false;
-  }
-
-  let validMove = false;
-  for (let i = 0; i < availableMoves.length; i++){
-    if (availableMoves[i][0] === row && availableMoves[i][1] === column){
-      validMove = true;
-      break;
-    }
-  }
-  if (!validMove){
-    return false;
-  }
-
-  gameBoard[row][column].occupiedBy = currentPlayer;
-
-  let newAvailableMoves = [];
-  let fruit = gameBoard[row][column].fruit;
-  let friend = gameBoard[row][column].friend;
-
-  for (let i = 0; i < BOARD_WIDTH; i++){
-    for (let j = 0; j < BOARD_WIDTH; j++){
-      if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
-        newAvailableMoves.push([i, j]);
-      }
-    }
-  }
-  availableMoves = newAvailableMoves;
-  return true;
-}
 
 
 
 // **************************
 // **** For Testing Only*****
 // **************************
-gameProcess();
+gameStart();
+
+
+// **************************
+// **** Extra Code*****
+// **************************
+
+// Valid Move Check
+// Input: Two element array for row and column
+// Output: Boolean value if the move was valid
+// function processMove(move){
+//   let row = move[0];
+//   let column = move[1];
+
+//   if (gameBoard[row][column].occupiedBy){
+//     return false;
+//   }
+
+//   let validMove = false;
+//   for (let i = 0; i < availableMoves.length; i++){
+//     if (availableMoves[i][0] === row && availableMoves[i][1] === column){
+//       validMove = true;
+//       break;
+//     }
+//   }
+//   if (!validMove){
+//     return false;
+//   }
+
+//   gameBoard[row][column].occupiedBy = currentPlayer;
+
+//   let newAvailableMoves = [];
+//   let fruit = gameBoard[row][column].fruit;
+//   let friend = gameBoard[row][column].friend;
+
+//   for (let i = 0; i < BOARD_WIDTH; i++){
+//     for (let j = 0; j < BOARD_WIDTH; j++){
+//       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
+//         newAvailableMoves.push([i, j]);
+//       }
+//     }
+//   }
+//   availableMoves = newAvailableMoves;
+//   return true;
+// }
 
