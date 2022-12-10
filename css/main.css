@@ -47,5 +47,7 @@ html {
   border: 5px solid red;
 }
 
-
+.tokenLayer {
+  z-index: 3;
+}
 
