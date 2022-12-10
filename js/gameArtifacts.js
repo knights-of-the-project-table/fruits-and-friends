@@ -8,6 +8,7 @@
 class GameBoard{
   constructor(){
     this.board = [];
+    this.linearBoard = [];
     this.generate();
   }
 
@@ -43,6 +44,12 @@ class GameBoard{
       let row = Math.floor(tile[0] / 4);
       let column = tile[0] % 4;
       this.board[row][column] = tile[1];
+    }
+
+    for (let i = 0; i < this.board.length; i++){
+      for (let j = 0; j < this.board[i].length; j++){
+        this.linearBoard.push(this.board[i][j]);
+      }
     }
   }
 }
