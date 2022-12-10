@@ -65,6 +65,13 @@ class GameboardTile{
   }
 }
 
+class PlayerData{
+  constructor(){
+    this.wins = 0;
+    this.losses = 0;
+    this.playerToken = null;
+  }
+}
 
 // **************************
 // **** For Testing Only*****

@@ -53,6 +53,15 @@ initializeMoves();
 const gameBoardObj = new GameBoard();
 const gameBoard = gameBoardObj.board;
 const linearGameBoard = gameBoardObj.linearBoard;
+
+// Sets up players
+let players = [];
+players.push(new PlayerData);
+players.push(new PlayerData);
+players[0].playerToken = "https://place-hold.it/100x100/000/fff";
+players[1].playerToken = "https://place-hold.it/100x100/000/fff";
+
+
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
   const row = Math.floor(i / BOARD_WIDTH);
@@ -100,6 +109,10 @@ function makeMove(row, column) {
   enableAvailableTiles();
 
   // TODO: add function that replaces tile image with token image
+  let token = document.createElement('img');
+  token.src = players[currentPlayer - 1].playerToken;
+  token.className = 'tokenLayer';
+  gameBoard[row][column].button.appendChild(token);
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
@@ -134,7 +147,7 @@ function enableAvailableTiles(){
   for (let i = 0; i < availableMoves.length; i++){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
-    // gameBoard[row][column].button.disabled = false;
+    gameBoard[row][column].button.disabled = false;
     console.log([row,column]);
   }
 }
