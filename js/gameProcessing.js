@@ -47,9 +47,12 @@ const gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
+initializeMoves();
 
 // Sets up the board
-const gameBoard = new GameBoard().board;
+const gameBoardObj = new GameBoard();
+const gameBoard = gameBoardObj.board;
+const linearGameBoard = gameBoardObj.linearBoard;
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
   const row = Math.floor(i / BOARD_WIDTH);
@@ -57,15 +60,18 @@ gameTiles.forEach((gameTile, i) => {
   gameBoard[row][column].button = gameTile;
   // Before the game starts, each button is disabled
   gameTile.disabled = true;
-  gameTile.addEventListener('click', makeMove(row, column));
+  gameTile.addEventListener('click', makeMove);
+  gameTile.id = i;
+  let image = document.createElement('img');
+  image.src = gameBoard[row][column].imageSrc;
+  gameTile.appendChild(image);
 });
 
 // Loads previous save state (if any) and starts the game
 function gameStart(){
-
+  console.log(5);
   // Three objects loaded from saved state: Board, availableMoves[], current tile
-  initializeMoves();
-
+  console.log(availableMoves);
   enableAvailableTiles();
 }
 
@@ -75,19 +81,21 @@ function initializeMoves(){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
         availableMoves.push([i, j]);
+        console.log('hi');
       }
     }
   }
 }
 
 // Event Handler for clicking on a tile
-function makeMove(row, column) {
-  gameBoard[row][column].occupiedBy = currentPlayer;
-
-  updateAvailableMoves();
+function makeMove(event) {
+  const idx = event.target.id;
+  linearGameBoard[idx].occupiedBy = currentPlayer;
+  console.log('move');
+  updateAvailableMoves(idx);
   enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image  
+  // TODO: add function that replaces tile image with token image
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
@@ -101,10 +109,10 @@ function makeMove(row, column) {
 }
 
 // Updates the availableMoves array with the next set of valid moves
-function updateAvailableMoves(){
+function updateAvailableMoves(idx){
   let newAvailableMoves = [];
-  let fruit = gameBoard[row][column].fruit;
-  let friend = gameBoard[row][column].friend;
+  let fruit = linearGameBoard[idx].fruit;
+  let friend = linearGameBoard[idx].friend;
 
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
@@ -123,7 +131,8 @@ function enableAvailableTiles(){
   for (let i = 0; i < availableMoves.length; i++){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
-    gameBoard[row][column].button.disabled = false;
+    // gameBoard[row][column].button.disabled = false;
+    console.log([row,column]);
   }
 }
 
