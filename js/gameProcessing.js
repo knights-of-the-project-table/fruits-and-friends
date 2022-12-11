@@ -173,9 +173,14 @@ function setCurrentPlayerStatus() {
   gameStatus.innerText = `Player ${currentPlayer}'s Turn`;
 }
 
+// code to reset the entire gameBoard and remove all children from button
+const resetButton = document.getElementById('resetButton');
 
+function eventReset(){
+  location.reload();
+}
 
-
+resetButton.addEventListener('click', eventReset);
 
 // **************************
 // **** For Testing Only*****
