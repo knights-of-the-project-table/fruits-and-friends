@@ -9,7 +9,7 @@
 // Values on Win/loss
 // Redo game tiles / board without extra information
 
-let cpuDifficulty = 5;
+let cpuDifficulty = 7;
 
 class AIBoard{
     constructor(gameBoard){
@@ -83,17 +83,19 @@ function deepDiveBoardScore(board){
     let score = 0;
     for (let i = 0; i < BOARD_WIDTH; i++){
         for (let j = 0; j < BOARD_HEIGHT; j++){
-            if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
-                if(board[i][j].occupiedBy === 1){
-                    score -= 7;
+            if (board[i][j].occupiedBy) {
+                if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))) {
+                    if (board[i][j].occupiedBy === 1) {
+                        score -= 7;
+                    } else {
+                        score += 7;
+                    }
                 } else {
-                    score += 7;
-                }
-            } else {
-                if(board[i][j].occupiedBy === 1){
-                    score -= 4;
-                } else {
-                    score += 4;
+                    if (board[i][j].occupiedBy === 1) {
+                        score -= 4;
+                    } else {
+                        score += 4;
+                    }
                 }
             }
         }
@@ -105,13 +107,19 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
 
     // If a win is detected for divePlayer, stop recursion and return win flag
     if (deepDiveWin(board.board, diveAvailableMoves, divePlayer)){
-        return ((divePlayer * 2 - 3) * 100);
+
+        let moveScore = (divePlayer * 2 - 3) * 100;
+
+        return (moveScore);
     }
     depth--;
 
+
     // If max depth reached, return board value
     if (depth < 1){
-        return deepDiveBoardScore(board.board)
+
+        let moveScore = deepDiveBoardScore(board.board);
+        return (moveScore);
     }
 
 
@@ -119,9 +127,11 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
     divePlayer = divePlayer === 1 ? 2 : 1;
 
     let playerCoefficient = (divePlayer * 2 - 3);
-    let nodeScore = (-1000) * playerCoefficient;
+
+    let bestMoveScore = (-1000) * playerCoefficient;
 
     for (let i = 0; i < diveAvailableMoves.length; i++){
+
         let cpuMoveBoard =  new AIBoard(board.linearBoard);
         let move = diveAvailableMoves[i];
         cpuMoveBoard.board[move[0]][move[1]].occupiedBy = divePlayer;
@@ -129,38 +139,41 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
         let friend = cpuMoveBoard.board[move[0]][move[1]].friend;
 
         let branchAvailableMoves =  deepDiveAvailableMoves(board.board, fruit, friend);
-        let branchScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
+        let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
 
-        if (divePlayer === 2 && nodeScore < branchScore){
-            nodeScore = branchScore;
+        if (divePlayer === 2 && bestMoveScore < moveScore){
+           
+            bestMoveScore = moveScore;
         }
 
-        if (divePlayer === 1 && nodeScore > branchScore){
-            nodeScore = branchScore;
+        if (divePlayer === 1 && bestMoveScore > moveScore){
+            
+            bestMoveScore = moveScore;
         }
 
-        if (nodeScore === (100 * playerCoefficient)){
-            return nodeScore;    
+        if (bestMoveScore === (100 * playerCoefficient)){
+            return bestMoveScore;
         }   
 
         // if computer player, returns the highest value
         // if simulated human, returns the lowest value
 
     }
-
+    return bestMoveScore;
 }
 
 // Seeds a recursive algorithm to determine the best possible move for a desired level of difficulty
 // Requires a difficulty level
 // Returns CPU move in [row, column] format
 function cpuPlayerMoveGenerator(){
-    let moveScore = 0;
+    
     let row = null;
     let column = null;
     let bestMoveScore = -1000;
     let bestMoveIndex = 0;
 
     for (let i = 0; i < availableMoves.length; i++){
+        let moveScore = 0;
         let move = availableMoves[i];
         let boardSeed = new AIBoard(linearGameBoard);
         boardSeed.board[move[0]][move[1]].occupiedBy = 2;
@@ -172,10 +185,11 @@ function cpuPlayerMoveGenerator(){
         // Calls on deepDive() to return a score for that particular move branch
         moveScore = deepDive(boardSeed, diveAvailableMoves, 2, cpuDifficulty);
 
+
         if (bestMoveScore < moveScore){
             bestMoveScore = moveScore;
             bestMoveIndex = i;
-        }
+        }        
 
         // If unavoidable win is detected, stop search and take that path
         if (bestMoveScore === 100){
@@ -196,8 +210,8 @@ function cpuPlayerInitialize(){
 
     if (winLossDifference < 1){
         cpuDifficulty = 1;
-    } else if (winLossDifference > 9){
-        cpuDifficulty = 9;
+    } else if (winLossDifference > 8){
+        cpuDifficulty = 8;
     } else {
         cpuDifficulty = winLossDifference;
     }
