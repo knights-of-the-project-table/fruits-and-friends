@@ -12,7 +12,7 @@ function newGameBoard(){
   return new GameBoard;
 }
 
-// Restores, refactors, and returns a GameBoard object from local storage
+// Restores, instantiates, and returns a GameBoard object from local storage
 function restoreGameBoard(){
   let storedGameBoard = JSON.parse(localStorage.getItem('savedGameBoardState'));
   let instantiatedGameBoard = new GameBoard;
@@ -41,7 +41,7 @@ function newPlayers(){
   return new Players;
 }
 
-// Restores, refactors, and returns a Players object from local storage
+// Restores, instantiates, and returns a Players object from local storage
 function restorePlayers(){
   let storedPlayers = JSON.parse(localStorage.getItem('savedPlayersState'));
   let instantiatedPlayers = new Players();
@@ -68,13 +68,30 @@ function resetPlayers(){
   localStorage.clear('savedPlayersState');
 }
 
+// Saves the array of available moves to local storage
 function saveAvailableMoves(availableMoves){
   localStorage.setItem('savedAvailableMoves', JSON.stringify(availableMoves));
 }
 
+// Returns the array of available moves saved in local storage
 function restoreAvailableMoves(){
   let storedAvailableMoves = JSON.parse(localStorage.getItem('savedAvailableMoves'));
   return storedAvailableMoves;
+}
+
+// Saves the current player to local storage
+function saveCurrentPlayer(currentPlayer){
+  localStorage.setItem('savedCurrentPlayer', JSON.stringify(currentPlayer));
+}
+
+// Returns the current player saved in local storage
+function restoreCurrentPlayer(){
+  let storedCurrentPlayer = JSON.parse(localStorage.getItem('savedCurrentPlayer'));
+  return storedCurrentPlayer;
+}
+
+function resetAll(){
+  localStorage.clear();
 }
 
 class GameBoard{

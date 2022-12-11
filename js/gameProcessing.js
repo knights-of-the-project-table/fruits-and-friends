@@ -123,7 +123,6 @@ function makeMove(row, column) {
 function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
 
-
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
@@ -186,4 +185,6 @@ resetButton.addEventListener('click', eventReset);
 // **** For Testing Only*****
 // **************************
 gameStart();
+
+
 
