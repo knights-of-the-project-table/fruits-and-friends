@@ -140,7 +140,6 @@ body {
     border-radius: 10px;
     position: absolute;
     left: 15%;
-    top: ;
   }
   
   .openButton:hover {
@@ -212,7 +211,8 @@ body {
 }
 
 .gameTile:enabled {
-  border: 0.5rem solid red;
+  border: 0.5rem solid #D88C9A; 
+  border-radius: 10px;
   margin: 0.25rem;
 }
 
