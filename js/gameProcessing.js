@@ -47,6 +47,9 @@ const gameTiles = document.querySelectorAll('.gameTile');
 let availableMoves = [];
 let currentPlayer = 1;
 
+// Flag to enable / disable cpu player
+let cpuEnabled = true;
+
 // Sets up the board
 const gameBoardObj = newGameBoard();
 const gameBoard = gameBoardObj.board;
@@ -111,18 +114,25 @@ function makeMove(row, column) {
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
     disableTiles();
+    return;
   } else {
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     setCurrentPlayerStatus();
   }
 
   // TODO: add function to replace previous move image tile with current move image tile
+
+  if(cpuEnabled && currentPlayer === 2){
+    let move = cpuPlayerMoveGenerator();
+    row = move[0];
+    column = move[1];
+    makeMove(row, column);
+  }
 }
 
 // Updates the availableMoves array with the next set of valid moves
 function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
-
 
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
@@ -186,4 +196,6 @@ resetButton.addEventListener('click', eventReset);
 // **** For Testing Only*****
 // **************************
 gameStart();
+
+
 
