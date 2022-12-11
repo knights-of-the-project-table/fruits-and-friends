@@ -111,44 +111,44 @@ li a:hover {
 
 /* Nav Bar;
 ==================================================*/
-.sidebar {
-  width: 0;
-  position: fixed;
-  z-index: 1;
-  height: 550px;
-  top: 0;
-  left: 0;
-  background-color: #99c1b9;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 60px;
-  border-radius: 10px;
-}
-
-
-.sidebar .closeButton {
-  position: absolute;
-  top: 0;
-  right: 25px;
-  font-size: 36px;
-}
-
-.openButton {
-  font-size: 15px;
-  cursor: pointer;
-  background-color: #99c1b9;
-  color: black;
-  padding: 10px;
-  border-radius: 0px 10px 10px 0px;
-  position: absolute;
-  left: 0;
-  top: 50%;
-}
-
-.openButton:hover {
-  background-color: #70a396;
-}
-
+  .sidebar  {
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    height: 550px;
+    top: 15%;
+    left: 0;
+    background-color: #99c1b9;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    border-radius: 10px;
+  }
+  
+  
+  .sidebar .closeButton {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+  }
+  
+  .openButton {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: #99c1b9;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 10px;
+    position: absolute;
+    left: 15%;
+    top: ;
+  }
+  
+  .openButton:hover {
+    background-color:#444;
+  }
+  
 /* Game Board;
 ==================================================*/
 #gameOptions {
@@ -265,7 +265,8 @@ h3 {
 }
 
 .gameTile:enabled {
-  border: 0.5rem solid #d88c9a;
+  border: 0.5rem solid #D88C9A; 
+  border-radius: 10px;
   margin: 0.25rem;
 }
 

@@ -1,5 +1,4 @@
 'use strict';
-const BOARD_WIDTH = 4;
 
 const WIN_CONDITIONS = [
   // first row
