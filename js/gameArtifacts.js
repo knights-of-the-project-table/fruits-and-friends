@@ -68,6 +68,15 @@ function resetPlayers(){
   localStorage.clear('savedPlayersState');
 }
 
+function saveAvailableMoves(availableMoves){
+  localStorage.setItem('savedAvailableMoves', JSON.stringify(availableMoves));
+}
+
+function restoreAvailableMoves(){
+  let storedAvailableMoves = JSON.parse(localStorage.getItem('savedAvailableMoves'));
+  return storedAvailableMoves;
+}
+
 class GameBoard{
   constructor(){
     this.board = [];
