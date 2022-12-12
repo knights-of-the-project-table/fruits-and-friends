@@ -53,6 +53,7 @@ let cpuEnabled = true;
 // Sets up the board
 const gameBoardObj = newGameBoard();
 const gameBoard = gameBoardObj.board;
+// Linear game board is used in the AI calculations
 const linearGameBoard = gameBoardObj.linearBoard;
 
 // Sets up players
@@ -75,6 +76,7 @@ gameTiles.forEach((gameTile, i) => {
   gameTile.addEventListener('click', () => {
     makeMove(row, column);
   });
+
 });
 
 // Loads previous save state (if any) and starts the game
@@ -103,9 +105,15 @@ function makeMove(row, column) {
   let fruit = gameBoard[row][column].fruit;
   let friend = gameBoard[row][column].friend;
   updateAvailableMoves(fruit, friend);
-  enableAvailableTiles();
 
-  // Replaces tile image with token image
+  // Only enable available tiles if there is no CPU or if there is a CPU and the CPU just made a move
+  if (!cpuEnabled || (cpuEnabled && currentPlayer === 2)) {
+    enableAvailableTiles();
+  } else {
+    disableTiles();
+  }
+
+  // Adds player token image on top of tile image
   let token = document.createElement('img');
   token.src = players[currentPlayer - 1].playerToken;
   token.className = 'tokenLayer';
@@ -120,14 +128,11 @@ function makeMove(row, column) {
     setCurrentPlayerStatus();
   }
 
-  // TODO: add function to replace previous move image tile with current move image tile
-
-  if(cpuEnabled && currentPlayer === 2){
-    let move = cpuPlayerMoveGenerator();
-    row = move[0];
-    column = move[1];
-    makeMove(row, column);
+  // If the CPU is enabled, asynchronously call the CPU move
+  if (cpuEnabled && currentPlayer === 2) {
+    asyncCpuMove();
   }
+
 }
 
 // Updates the availableMoves array with the next set of valid moves
@@ -181,6 +186,25 @@ function disableTiles() {
 
 function setCurrentPlayerStatus() {
   gameStatus.innerText = `Player ${currentPlayer}'s Turn`;
+}
+
+// This function awaits a timed-out promise that calculates the CPU's next move. This is done to give the player a sense of rhythm when the CPU moves, and to make sure that the player token is painted in the browser in the makeMove function before the CPU token is added to the board.
+async function asyncCpuMove() {
+  const timeOutInterval = 2000;
+  const move = await resolveAfterTimeout(timeOutInterval);
+  const row = move[0];
+  const column = move[1];
+  makeMove(row, column);
+}
+
+// This function returns the CPU's calculated next move after a set time interval
+function resolveAfterTimeout(timeOut) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      let move = cpuPlayerMoveGenerator();
+      resolve(move);
+    }, timeOut);
+  });
 }
 
 // code to reset the entire gameBoard and remove all children from button
