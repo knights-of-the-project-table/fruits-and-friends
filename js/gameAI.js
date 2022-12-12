@@ -79,7 +79,6 @@ function deepDiveAvailableMoves(board, fruit, friend){
 // 7 points for the center squares (7 ways to win)
 // Subtracts points for positions held by human
 function deepDiveBoardScore(board){
-
     let score = 0;
     for (let i = 0; i < BOARD_WIDTH; i++){
         for (let j = 0; j < BOARD_HEIGHT; j++){
@@ -103,36 +102,30 @@ function deepDiveBoardScore(board){
     return score;    
 }
 
+// Core recursive depth-first function to search through moves immediately available at each level
+// Returns the best score for the CPU player based on max-min / Alpha-Beta methods for the initial node passed
 function deepDive(board, diveAvailableMoves, divePlayer, depth){
-
     // If a win is detected for divePlayer, stop recursion and return win flag
     if (deepDiveWin(board.board, diveAvailableMoves, divePlayer)){
-
         let moveScore = (divePlayer * 2 - 3) * 100;
-
         return (moveScore);
     }
     depth--;
 
-
     // If max depth reached, return board value
     if (depth < 1){
-
         let moveScore = deepDiveBoardScore(board.board);
         return (moveScore);
     }
 
-
     // Iterate to next player
     divePlayer = divePlayer === 1 ? 2 : 1;
+    let playerCoefficient = (divePlayer * 2 - 3);       // Set to 1 for CPU (max-layer) and -1 for human (min-layer)
+    let bestMoveScore = (-1000) * playerCoefficient;    // Set infinite flag (-1000 on max-layer and 1000 on min-layer)
 
-    let playerCoefficient = (divePlayer * 2 - 3);
-
-    let bestMoveScore = (-1000) * playerCoefficient;
-
+    // Loop through valid moves for hypothetical board state
     for (let i = 0; i < diveAvailableMoves.length; i++){
-
-        let cpuMoveBoard =  new AIBoard(board.linearBoard);
+        let cpuMoveBoard =  new AIBoard(board.linearBoard);     // 
         let move = diveAvailableMoves[i];
         cpuMoveBoard.board[move[0]][move[1]].occupiedBy = divePlayer;
         let fruit = cpuMoveBoard.board[move[0]][move[1]].fruit;
@@ -141,13 +134,11 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
         let branchAvailableMoves =  deepDiveAvailableMoves(board.board, fruit, friend);
         let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
 
-        if (divePlayer === 2 && bestMoveScore < moveScore){
-           
+        if (divePlayer === 2 && bestMoveScore < moveScore){           
             bestMoveScore = moveScore;
         }
 
-        if (divePlayer === 1 && bestMoveScore > moveScore){
-            
+        if (divePlayer === 1 && bestMoveScore > moveScore){            
             bestMoveScore = moveScore;
         }
 
@@ -169,23 +160,26 @@ function cpuPlayerMoveGenerator(){
     
     let row = null;
     let column = null;
-    let bestMoveScore = -1000;
-    let bestMoveIndex = 0;
+    let bestMoveScore = -1000;  // To approximate -infinity flag for alpha-beta method
+    let bestMoveIndex = 0;      // Index of move with highest value
 
+    //  Loop through all current valid moves and finds the move with the best possible outcome
     for (let i = 0; i < availableMoves.length; i++){
         let moveScore = 0;
         let move = availableMoves[i];
-        let boardSeed = new AIBoard(linearGameBoard);
+        let boardSeed = new AIBoard(linearGameBoard);       // Makes a copy of the current board for simulated moves
+
+        // Makes simulated move
         boardSeed.board[move[0]][move[1]].occupiedBy = 2;
         let fruit = boardSeed.board[move[0]][move[1]].fruit;
         let friend = boardSeed.board[move[0]][move[1]].friend;
-        
         let diveAvailableMoves = deepDiveAvailableMoves(boardSeed.board, fruit, friend);
 
         // Calls on deepDive() to return a score for that particular move branch
+        // Function does depth-first search out of all possible moves up to 'cpuDifficulty' layers
         moveScore = deepDive(boardSeed, diveAvailableMoves, 2, cpuDifficulty);
 
-
+        // Update best move score and associated index
         if (bestMoveScore < moveScore){
             bestMoveScore = moveScore;
             bestMoveIndex = i;
