@@ -272,6 +272,7 @@ h3 {
 
 .tileLayer {
   position: relative;
+  width: 150px;
 }
 
 .tokenLayer {
