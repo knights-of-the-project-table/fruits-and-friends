@@ -213,6 +213,7 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
 }
 
 #board {
@@ -259,19 +260,20 @@ h3 {
 
 .gameTile {
   position: relative;
-  border: 0;
+  border: 0.5rem solid #99c1b9;
+  border-radius: 10px;
   padding: 0;
-  margin: 0.75rem;
+  margin: 0.25rem;
 }
 
 .gameTile:enabled {
-  border: 0.5rem solid #D88C9A; 
-  border-radius: 10px;
-  margin: 0.25rem;
+  border-color: #dc8b9a;
 }
 
 .tileLayer {
   position: relative;
+  width: 150px;
+  display: block;
 }
 
 .tokenLayer {

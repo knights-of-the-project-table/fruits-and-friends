@@ -158,12 +158,12 @@ class Players{
     if (playerToken1) {
       this.players[0].playerToken = playerToken1;
     } else {
-      this.players[0].playerToken = './img/assets/player-tokens/black-token.svg';
+      this.players[0].playerToken = './img/assets/player-tokens/black-token-player-1.png';
     }
     if (playerToken2) {
       this.players[1].playerToken = playerToken2;
     } else {
-      this.players[1].playerToken = './img/assets/player-tokens/red-token.svg';
+      this.players[1].playerToken = './img/assets/player-tokens/red-token-player-2.png';
     }
   }
 }
