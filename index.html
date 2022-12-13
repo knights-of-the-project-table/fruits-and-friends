@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="css/main.css">
     <title>Fruits and Friends</title>
 </head>
-
 <body>
     <!-- content inside sidebar -->
     <div id="mySidebar" class="sidebar">
@@ -18,6 +17,11 @@
         <p>explanation of game rules</p>
     </div>
     <header>
+        <div class="intro">
+            <h1 class="logo-header">
+                <span class="logo">Fruits</span><span class="logo">&Friends</span>
+            </h1>
+        </div>
         <section id="header1">
             <section id="headerLogo">
                 <div id="asset1">
@@ -38,6 +42,7 @@
                     <li><a href="aboutUs.html">About Us</a></li>
                 </ul>
             </nav>
+           
         </section>
     </header>
     <main>
@@ -75,7 +80,9 @@
         <section id="board">
             <div class="playerAvatar">
                 <img src="https://place-hold.it/150x150/000/fff">
-                <h3>Player 1</h3>
+                <h3><label for="username">Player 1:</label>
+                    <input type="text" name="username" id="username"></h3>
+                    <button type="submit">Submit</button>
             </div>
 
             <section id="grid">
@@ -99,7 +106,9 @@
 
             <div class="playerAvatar">
                 <img src="https://place-hold.it/150x150/000/fff">
-                <h3>Player 2</h3>
+                <h3><label for="username">Player 2:</label>
+                    <input type="text" name="username" id="username"></h3>
+                    <button type="submit">Submit</button>
             </div>
         </section>
         <div id="resetButtonContainer">
