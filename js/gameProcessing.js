@@ -1,5 +1,4 @@
 'use strict';
-const BOARD_WIDTH = 4;
 
 const WIN_CONDITIONS = [
   // first row
@@ -47,12 +46,20 @@ const gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
-initializeMoves();
+
+// Flag to enable / disable cpu player
+let cpuEnabled = true;
 
 // Sets up the board
-const gameBoardObj = new GameBoard();
+const gameBoardObj = newGameBoard();
 const gameBoard = gameBoardObj.board;
+// Linear game board is used in the AI calculations
 const linearGameBoard = gameBoardObj.linearBoard;
+
+// Sets up players
+let playersObject = newPlayers();
+let players = playersObject.players;
+
 // Add each gameTile html element to the game board and create Event Handler
 gameTiles.forEach((gameTile, i) => {
   const row = Math.floor(i / BOARD_WIDTH);
@@ -63,11 +70,13 @@ gameTiles.forEach((gameTile, i) => {
 
   gameTile.id = i;
   let image = document.createElement('img');
+  image.className = 'tileLayer';
   image.src = gameBoard[row][column].imageSrc;
   gameTile.appendChild(image);
   gameTile.addEventListener('click', () => {
     makeMove(row, column);
   });
+
 });
 
 // Loads previous save state (if any) and starts the game
@@ -85,7 +94,6 @@ function initializeMoves(){
     for (let j = 0; j < BOARD_WIDTH; j++){
       if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
         availableMoves.push([i, j]);
-        console.log('hi');
       }
     }
   }
@@ -97,25 +105,39 @@ function makeMove(row, column) {
   let fruit = gameBoard[row][column].fruit;
   let friend = gameBoard[row][column].friend;
   updateAvailableMoves(fruit, friend);
-  enableAvailableTiles();
 
-  // TODO: add function that replaces tile image with token image
+  // Only enable available tiles if there is no CPU or if there is a CPU and the CPU just made a move
+  if (!cpuEnabled || (cpuEnabled && currentPlayer === 2)) {
+    enableAvailableTiles();
+  } else {
+    disableTiles();
+  }
+
+  // Adds player token image on top of tile image
+  let token = document.createElement('img');
+  token.src = players[currentPlayer - 1].playerToken;
+  token.className = 'tokenLayer';
+  gameBoard[row][column].button.appendChild(token);
 
   if (evaluateWin()) {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
     disableTiles();
+    return;
   } else {
     currentPlayer = currentPlayer === 1 ? 2 : 1;
     setCurrentPlayerStatus();
   }
 
-  // TODO: add function to replace previous move image tile with current move image tile
+  // If the CPU is enabled, asynchronously call the CPU move
+  if (cpuEnabled && currentPlayer === 2) {
+    asyncCpuMove();
+  }
+
 }
 
 // Updates the availableMoves array with the next set of valid moves
 function updateAvailableMoves(fruit, friend){
   let newAvailableMoves = [];
-
 
   for (let i = 0; i < BOARD_WIDTH; i++){
     for (let j = 0; j < BOARD_WIDTH; j++){
@@ -134,8 +156,7 @@ function enableAvailableTiles(){
   for (let i = 0; i < availableMoves.length; i++){
     let row = availableMoves[i][0];
     let column = availableMoves[i][1];
-    // gameBoard[row][column].button.disabled = false;
-    console.log([row,column]);
+    gameBoard[row][column].button.disabled = false;
   }
 }
 
@@ -167,9 +188,33 @@ function setCurrentPlayerStatus() {
   gameStatus.innerText = `Player ${currentPlayer}'s Turn`;
 }
 
+// This function awaits a timed-out promise that calculates the CPU's next move. This is done to give the player a sense of rhythm when the CPU moves, and to make sure that the player token is painted in the browser in the makeMove function before the CPU token is added to the board.
+async function asyncCpuMove() {
+  const timeOutInterval = 2000;
+  const move = await resolveAfterTimeout(timeOutInterval);
+  const row = move[0];
+  const column = move[1];
+  makeMove(row, column);
+}
 
+// This function returns the CPU's calculated next move after a set time interval
+function resolveAfterTimeout(timeOut) {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      let move = cpuPlayerMoveGenerator();
+      resolve(move);
+    }, timeOut);
+  });
+}
 
+// code to reset the entire gameBoard and remove all children from button
+const resetButton = document.getElementById('resetButton');
 
+function eventReset(){
+  location.reload();
+}
+
+resetButton.addEventListener('click', eventReset);
 
 // **************************
 // **** For Testing Only*****
@@ -177,46 +222,4 @@ function setCurrentPlayerStatus() {
 gameStart();
 
 
-// **************************
-// **** Extra Code*****
-// **************************
-
-// Valid Move Check
-// Input: Two element array for row and column
-// Output: Boolean value if the move was valid
-// function processMove(move){
-//   let row = move[0];
-//   let column = move[1];
-
-//   if (gameBoard[row][column].occupiedBy){
-//     return false;
-//   }
-
-//   let validMove = false;
-//   for (let i = 0; i < availableMoves.length; i++){
-//     if (availableMoves[i][0] === row && availableMoves[i][1] === column){
-//       validMove = true;
-//       break;
-//     }
-//   }
-//   if (!validMove){
-//     return false;
-//   }
-
-//   gameBoard[row][column].occupiedBy = currentPlayer;
-
-//   let newAvailableMoves = [];
-//   let fruit = gameBoard[row][column].fruit;
-//   let friend = gameBoard[row][column].friend;
-
-//   for (let i = 0; i < BOARD_WIDTH; i++){
-//     for (let j = 0; j < BOARD_WIDTH; j++){
-//       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
-//         newAvailableMoves.push([i, j]);
-//       }
-//     }
-//   }
-//   availableMoves = newAvailableMoves;
-//   return true;
-// }
 
