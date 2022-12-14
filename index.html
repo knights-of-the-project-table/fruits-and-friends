@@ -16,6 +16,7 @@
         <a href="javascript:void(0)" class="closeButton" onclick="closeNav()">×</a>
         <p>explanation of game rules</p>
     </div>
+
     <header>
         <div class="intro">
             <h1 class="logo-header">
@@ -24,14 +25,20 @@
         </div>
         <section id="header1">
             <section id="headerLogo">
-                <div id="asset1">
-                    <img class="img1" src="https://place-hold.it/150x150/ddd" />
+                <div>
+                    <img id="img1" src="img/assets/header-images/kangaroo.png" />
+                </div>
+                <div>
+                    <img id="img2" src="img/assets/header-images/watermelon.png" />
                 </div>
                 <div class="heading">
                     <h1>Fruits & Friends</h1>
                 </div>
-                <div class="asset2">
-                    <img class="img1" src="https://place-hold.it/150x150/ddd" />
+                <div>
+                    <img id="img3" src="img/assets/header-images/strawberry.png" />
+                </div>
+                <div>
+                    <img id="img4" src="img/assets/header-images/dragon.png" />
                 </div>
             </section>
         </section>
@@ -48,10 +55,10 @@
     <main>
         <nav id="gameOptions">
             <button class="gameOptionButtons" id="playerGameButton">2 Player Game</button>
-            <button class="gameOptionButtons" id="playMachine">Play Against the Machine</button>
+            <button class="gameOptionButtons" id="playMachine">1 Player Game</button>
         </nav>
         <!-- opens game rules sidebar -->
-        <button class="openButton" onclick="openNav()">&#9776; Game Rules</button>
+        <button class="openButton" onclick="openNav()">&#9776; Game<br>Rules</button>
         <!-- display scoreboard -->
         <div id="scoreBoard">
             <div class="playerScore">
