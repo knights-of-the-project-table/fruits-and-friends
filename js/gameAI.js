@@ -1,5 +1,7 @@
 'use strict';
 
+
+
 // The AI segment uses a scoring system with CPU wins with an assigned score flag of 100
 // Simulated human wins are assigned a score flag of -100
 
@@ -9,19 +11,56 @@
 // Values on Win/loss
 // Redo game tiles / board without extra information
 
-let cpuDifficulty = 7;
+const WIN_CONDITIONS_ARRAY = [
+    // first row
+    [0, 1, 2, 3],
+    // second row
+    [4, 5, 6, 7],
+    // third row
+    [8, 9, 10, 11],
+    // fourth row
+    [12, 13, 14, 15],
+    // first column
+    [0, 4, 8, 12],
+    // second column
+    [1, 5, 9, 13],
+    // third column
+    [2, 6, 10, 14],
+    // fourth column
+    [3, 7, 11, 15],
+    // first diagonal
+    [0, 5, 10, 15],
+    // second diagonal
+    [3, 6, 9, 12],
+    // top left square
+    [0, 1, 4, 5],
+    // top middle square
+    [1, 2, 5, 6],
+    // top right square
+    [2, 3, 6, 7],
+    // middle left square
+    [4, 5, 8, 9],
+    // middle middle square
+    [5, 6, 9, 10],
+    // middle right square
+    [6, 7, 10, 11],
+    // bottom left square
+    [8, 9, 12, 13],
+    // bottom middle square
+    [9, 10, 13, 14],
+    // bottom right square
+    [10, 11, 14, 15],
+  ];
+
+let cpuDifficulty = 12;
 
 class AIBoard{
-    constructor(gameBoard){
-        this.board = [];
+    constructor(gameLinearBoard){
         this.linearBoard = [];
-        this.generate(gameBoard);
+        this.generate(gameLinearBoard);
     }
 
     generate(gameLinearBoard){
-        for (let i = 0; i < BOARD_HEIGHT; i++){
-            this.board.push(new Array(4).fill(0));
-        }
         
         for (let i = 0; i < gameLinearBoard.length; i++){
             let fruit = gameLinearBoard[i].fruit;
@@ -29,10 +68,6 @@ class AIBoard{
             let occupiedBy = gameLinearBoard[i].occupiedBy;
 
             this.linearBoard[i] = new AITile(fruit, friend, occupiedBy);
-
-            let row = Math.floor(i / BOARD_WIDTH);
-            let column = i % BOARD_HEIGHT;
-            this.board[row][column] = this.linearBoard[i];
         }
     }
 }
@@ -51,12 +86,10 @@ function deepDiveWin(board, diveAvailableMoves, divePlayer){
       return true;
     }
     // Iterate through every win condition with the .some() method, which tests whether at least one element in the array passes the test of a callback function.
-    return WIN_CONDITIONS.some(condition => {
+    return WIN_CONDITIONS_ARRAY.some(condition => {
       // For every win condition, check to see if the current player occupies the necessary indices of the game board using .every() method
       return condition.every(gameBoardPosition => {
-        let row = gameBoardPosition[0];
-        let column = gameBoardPosition[1];
-        return board[row][column].occupiedBy === divePlayer;
+        return board.linearBoard[gameBoardPosition].occupiedBy === divePlayer;
       });
     });
   }
@@ -64,12 +97,11 @@ function deepDiveWin(board, diveAvailableMoves, divePlayer){
 function deepDiveAvailableMoves(board, fruit, friend){
     let newAvailableMoves = [];
 
-    for (let i = 0; i < BOARD_WIDTH; i++) {
-        for (let j = 0; j < BOARD_WIDTH; j++) {
-            if (!board[i][j].occupiedBy && (board[i][j].fruit === fruit || board[i][j].friend === friend)) {
-                newAvailableMoves.push([i, j]);
+    for (let i = 0; i < board.length; i++) {
+            if (!board[i].occupiedBy && (board[i].fruit === fruit || board[i].friend === friend)) {
+                // console.log(i, j);
+                newAvailableMoves.push(i);
             }
-        }
     }
     return newAvailableMoves;
 }
@@ -81,23 +113,22 @@ function deepDiveAvailableMoves(board, fruit, friend){
 function deepDiveBoardScore(board){
     let score = 0;
     for (let i = 0; i < BOARD_WIDTH; i++){
-        for (let j = 0; j < BOARD_HEIGHT; j++){
-            if (board[i][j].occupiedBy) {
-                if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))) {
-                    if (board[i][j].occupiedBy === 1) {
+            if (board.linearBoard[i].occupiedBy) {
+                if ((i === 5 || i === 6 || i === 9 || i === 10)) {
+                    if (board.linearBoard[i].occupiedBy === 1) {
                         score -= 7;
                     } else {
                         score += 7;
                     }
                 } else {
-                    if (board[i][j].occupiedBy === 1) {
+                    if (board.linearBoard[i].occupiedBy === 1) {
                         score -= 4;
                     } else {
                         score += 4;
                     }
                 }
             }
-        }
+        
     }
     return score;    
 }
@@ -106,15 +137,18 @@ function deepDiveBoardScore(board){
 // Returns the best score for the CPU player based on max-min / Alpha-Beta methods for the initial node passed
 function deepDive(board, diveAvailableMoves, divePlayer, depth){
     // If a win is detected for divePlayer, stop recursion and return win flag
-    if (deepDiveWin(board.board, diveAvailableMoves, divePlayer)){
-        let moveScore = (divePlayer * 2 - 3) * 100;
+    let depthShift = depth - cpuDifficulty; 
+
+    if (deepDiveWin(board, diveAvailableMoves, divePlayer)){
+        let moveScore = (divePlayer * 2 - 3) * (100 + depthShift);
+        // console.log(moveScore);
         return (moveScore);
     }
     depth--;
 
     // If max depth reached, return board value
     if (depth < 1){
-        let moveScore = deepDiveBoardScore(board.board);
+        let moveScore = deepDiveBoardScore(board);
         return (moveScore);
     }
 
@@ -123,34 +157,58 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
     let playerCoefficient = (divePlayer * 2 - 3);       // Set to 1 for CPU (max-layer) and -1 for human (min-layer)
     let bestMoveScore = (-1000) * playerCoefficient;    // Set infinite flag (-1000 on max-layer and 1000 on min-layer)
 
+    let testMove = [];
+
     // Loop through valid moves for hypothetical board state
     for (let i = 0; i < diveAvailableMoves.length; i++){
         let cpuMoveBoard =  new AIBoard(board.linearBoard);     // 
         let move = diveAvailableMoves[i];
-        cpuMoveBoard.board[move[0]][move[1]].occupiedBy = divePlayer;
-        let fruit = cpuMoveBoard.board[move[0]][move[1]].fruit;
-        let friend = cpuMoveBoard.board[move[0]][move[1]].friend;
+        // console.log(move);
+        if (cpuMoveBoard.linearBoard[move].occupiedBy){
+            console.log(cpuMoveBoard.linearBoard[move].occupiedBy);
+        }
+        cpuMoveBoard.linearBoard[move].occupiedBy = divePlayer;
+        let fruit = cpuMoveBoard.linearBoard[move].fruit;
+        let friend = cpuMoveBoard.linearBoard[move].friend;
 
-        let branchAvailableMoves =  deepDiveAvailableMoves(board.board, fruit, friend);
+        let branchAvailableMoves =  deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend);
         let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
+        // console.log(branchAvailableMoves);
+        // console.log(divePlayer);
 
         if (divePlayer === 2 && bestMoveScore < moveScore){           
             bestMoveScore = moveScore;
+            testMove = diveAvailableMoves[i];
+            if (bestMoveScore === (100 + depthShift)){
+                return bestMoveScore;
+            }
         }
 
         if (divePlayer === 1 && bestMoveScore > moveScore){            
             bestMoveScore = moveScore;
+            testMove = diveAvailableMoves[i];
+            if (bestMoveScore === (100 - depthShift)){
+                return bestMoveScore;
+            }
         }
 
-        if (bestMoveScore === (100 * playerCoefficient)){
-            return bestMoveScore;
-        }   
+        // if (depthShift === 0){
+        //     console.log(moveScore);
+        // }
+
+        // console.log(bestMoveScore);
+
+        // if (bestMoveScore === ((100 + depthShift) * playerCoefficient)){
+        //     return bestMoveScore;
+        // }   
 
         // if computer player, returns the highest value
         // if simulated human, returns the lowest value
 
     }
-    return bestMoveScore;
+
+    return (bestMoveScore);
+
 }
 
 // Seeds a recursive algorithm to determine the best possible move for a desired level of difficulty
@@ -166,14 +224,15 @@ function cpuPlayerMoveGenerator(){
     //  Loop through all current valid moves and finds the move with the best possible outcome
     for (let i = 0; i < availableMoves.length; i++){
         let moveScore = 0;
-        let move = availableMoves[i];
+        let moveCoords = availableMoves[i];
+        let move = moveCoords[0] * 4 + moveCoords[1];
         let boardSeed = new AIBoard(linearGameBoard);       // Makes a copy of the current board for simulated moves
 
         // Makes simulated move
-        boardSeed.board[move[0]][move[1]].occupiedBy = 2;
-        let fruit = boardSeed.board[move[0]][move[1]].fruit;
-        let friend = boardSeed.board[move[0]][move[1]].friend;
-        let diveAvailableMoves = deepDiveAvailableMoves(boardSeed.board, fruit, friend);
+        boardSeed.linearBoard[move].occupiedBy = 2;
+        let fruit = boardSeed.linearBoard[move].fruit;
+        let friend = boardSeed.linearBoard[move].friend;
+        let diveAvailableMoves = deepDiveAvailableMoves(boardSeed.linearBoard, fruit, friend);
 
         // Calls on deepDive() to return a score for that particular move branch
         // Function does depth-first search out of all possible moves up to 'cpuDifficulty' layers
@@ -186,13 +245,18 @@ function cpuPlayerMoveGenerator(){
         }        
 
         // If unavoidable win is detected, stop search and take that path
-        if (bestMoveScore === 100){
-            break;
-        }
+        // if (bestMoveScore === 100){
+        //     break;
+        // }
     }
 
-    row = availableMoves[bestMoveIndex][0];
+    row = availableMoves[bestMoveIndex][0] ;
     column = availableMoves[bestMoveIndex][1];
+
+    // console.log(`Possible move scores: ${moveScoreArray}`);
+    // console.log(`Possible moves: ${availableMoves}`);
+    console.log(`Best move score: ${bestMoveScore}`);
+    console.log(`Picked move: ${[row, column]}`);
 
     return([row, column])
 }
@@ -211,7 +275,45 @@ function cpuPlayerInitialize(){
     }
 }
 
+// if (typeof window == "undefined"){
+//   let boardMessed = new AIBoard(
+//     [{fruit: 'watermelon', friend: `dragon`, occupiedBy: null},
+//     {fruit: 'orange',friend: `dragon`, occupiedBy: null},
+//     {fruit: 'orange',friend: `kangaroo`, occupiedBy: null},
+//     {fruit: 'watermelon',friend: `kangaroo`, occupiedBy: 2},
+//     {fruit: 'banana',friend: `kangaroo`, occupiedBy: 1},
+//     {fruit: 'strawberry',friend: `kangaroo`, occupiedBy: 1},
+//     {fruit: 'banana', friend: `dog`,occupiedBy: null},
+//     {fruit: 'watermelon',friend: `dog`, occupiedBy: null},
+//     {fruit: 'orange', friend: `turtle`, occupiedBy: 2},
+//     {fruit: 'banana', friend: `turtle`, occupiedBy: 1},
+//     {fruit: 'orange', friend: `dog`, occupiedBy: 1},
+//     {fruit: 'watermelon', friend: `turtle`, occupiedBy: null},
+//     {fruit: 'strawberry', friend: `turtle`, occupiedBy: 2},
+//     {fruit: 'banana', friend: `dragon`, occupiedBy: null},
+//     {fruit: 'strawberry', friend: `dragon`, occupiedBy: null},
+//     {fruit: 'strawberry', friend: `dog`, occupiedBy: null}]
+//   );
 
+//   let temp = [];
+//   for (let i  = 0; i < 16; i++){
+//     let x = Math.floor(i/4);
+//     let y = i % 4;
+//     let jp = y * 4 +x ;
+//     temp[jp] = boardMessed.linearBoard[i];
+//   }
+
+//   let board = new AIBoard(temp);
+
+//   console.log(boardMessed.linearBoard[1]);
+//   console.log(board.linearBoard[1]);
+// //    let testArray = [[1,0],[2,0],[2,1], [3,1], [3,3]];
+//    let testArray = [4, 8, 9, 13, 15];
+// //    let testArray = [8];
+
+//   let score = deepDive(board, testArray, 1, cpuDifficulty);
+//   console.log(score);
+// }
 
 // function sample(depth){
 //     if (depth === 0){
