@@ -3,8 +3,11 @@
 	- Google fonts & font family -
 	- Typography -
   - Color Palette -
+  - Splash Screen -
   - General -
-  - Nav Bar -
+  - Header -
+  - Side Bar -
+  - Player Name Form -
   - Game Board -
 */
 
@@ -43,6 +46,7 @@ html {
 
 /* Splash Screen  
 =================================================*/
+
 .intro {
   position: fixed;
   z-index: 1;
@@ -59,13 +63,10 @@ html {
   top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
-  color: #D88C9A;
-  font-size: 100px; 
 } 
 
 #logo-header-fruits {
   position: relative;
-  display: block;
   height: 700px;
 }
 
@@ -100,18 +101,8 @@ html {
   transition: ease-in-out 0.5s;
 }
 
-
-
 /* General;
 ==================================================*/
-header {
-  position: realtive;
-}
-
-header h2 {
-  position: absolute;
-  left: 45%;
-}
 
 body {
   display: flex;
@@ -122,82 +113,32 @@ body {
   width: 100%;
 }
 
-header {
-  background-color: #D88C9A;
-  width: 100%;
-}
-
 h1 {
   text-align: center;
-  font-size: 80px;
+  font-size: 5rem;
   margin-top: 3rem;
   font-family: Luckiest Guy;
   color: #F2D0A9;
   -webkit-text-stroke: 2px rgb(70, 70, 70);
 }
 
-#header1 {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+h2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
-#headerLogo {
-  display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  justify-content: space-between;
-}
-
-#img1 {
-  height: 140px;
-  width: 140px;
-  transform: rotate(deg);
-  position: relative;
-  top: -5%;
-  left: 20%;
-}
-
-#img2 {
-  height: 90px;
-  width: 90px;
-  transform: rotate(-35deg);
-  position: relative;
-  top: 30%;
-  left: -10%;
-
-}
-
-#img3 {
-  height: 80px;
-  width: 80px;
-  transform: rotate(20deg);
-  position: relative;
-  top: 25%;
-  right: -15%;
-}
-
-#img4 {
-  height: 130px;
-  width: 130px;
-  transform: rotate(deg);
-  position: relative;
-  top: -5%;
-  right: 5%;
-}
-
-.navbar {
-  display: flex;
-  justify-content: center;
-  font-size: 22px;
-  background-color: #F1E3D3;
-  box-shadow: 5px 5px 2px -2px #927d66;
+h3 {
+  font-family: Luckiest Guy;
+  margin-top: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  color: #e0a3ae;
+  -webkit-text-stroke: 2px black;
 }
 
 li {
   display: inline;
   float: left;
-
 }
 
 a {
@@ -214,13 +155,88 @@ li a:hover {
   border-radius: 10%;
 }
 
+button {
+  box-shadow: 0 5px 0 0 #6f7876;
+  cursor:pointer;
+}
+
+button:active {
+  transform: translateY(4px);
+}
+
+/* Header;
+==================================================*/
+
+header {
+  position: relative;
+  background-color: #D88C9A;
+  width: 100%;
+}
+
+#header1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#headerLogo {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+  justify-content: space-between;
+}
+
+#headerLogoKangaroo {
+  height: 140px;
+  width: 140px;
+  transform: rotate(deg);
+  position: relative;
+  top: -5%;
+  left: 20%;
+}
+
+#headerLogoWatermelon {
+  height: 90px;
+  width: 90px;
+  transform: rotate(-35deg);
+  position: relative;
+  top: 30%;
+  left: -10%;
+}
+
+#headerLogoStrawberry {
+  height: 80px;
+  width: 80px;
+  transform: rotate(20deg);
+  position: relative;
+  top: 25%;
+  right: -15%;
+}
+
+#headerLogoDragon {
+  height: 130px;
+  width: 130px;
+  transform: rotate(deg);
+  position: relative;
+  top: -5%;
+  right: 5%;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+  background-color: #F1E3D3;
+  box-shadow: 5px 5px 2px -2px #927d66;
+}
+
 /* Side Bar;
 ==================================================*/
 
 .sidebar {
   width: 0;
   position: fixed;
-  z-index: 1;
+  z-index: 4;
   top: 0;
   bottom: 0;
   left: 0;
@@ -230,7 +246,6 @@ li a:hover {
   padding-top: 60px;
   border-radius: 10px;
 }
-
 
 .sidebar .closeButton {
   position: absolute;
@@ -253,20 +268,42 @@ li a:hover {
 }
 
 .openButton:hover {
-  background-color: #444;
+  background-color: #7eb6a8;
 }
 
-/* Form 
+/* Player Name Form 
 ==================================================*/
+
 input {
   background-color: #8E7DBE;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-  font-size: 20px;
+  font-size: 1.25rem;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
 }
 
+input[type=text] {
+  padding: 5px;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 0.5; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: white;
+}
 
 /* Game Board;
 ==================================================*/
+
 #gameOptions {
   display: flex;
   justify-content: center;
@@ -305,11 +342,6 @@ input {
   font-size: 40px;
 }
 
-h2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
-}
-
 .playerScore {
   display: flex;
   margin-left: 0.5rem;
@@ -337,20 +369,30 @@ h2 {
   flex-direction: row;
   justify-content: space-evenly;
   align-items: center;
+  flex-wrap: wrap;
   margin: 1rem;
 }
 
 .playerAvatar {
   margin: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
 }
 
-h3 {
-  font-family: Luckiest Guy;
-  margin-top: 1rem;
-  font-size: 25px;
-  text-align: center;
-  color: #e0a3ae;
-  -webkit-text-stroke: 2px black;
+@media only screen and (max-width: 1600px) {
+  #board > :nth-child(1) {order: 2;}
+  #board > :nth-child(2) {order: 1;}
+  #board > :nth-child(3) {order: 3;}
+}
+
+#playerOneAvatarImg {
+  width: 150px;
+}
+
+#playerTwoAvatarImg {
+  width: 150px;
 }
 
 #resetButtonContainer {
@@ -380,6 +422,7 @@ h3 {
   border-radius: 10px;
   padding: 0;
   margin: 0.25rem;
+  box-shadow: 5px 5px 2px -2px #6f7876;
 }
 
 .gameTile:enabled {
