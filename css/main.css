@@ -160,8 +160,12 @@ button {
   cursor:pointer;
 }
 
-button:active {
+button:enabled:active {
   transform: translateY(4px);
+}
+
+button:disabled {
+  cursor: auto;
 }
 
 /* Header;
@@ -381,7 +385,10 @@ input[type=text] {
   align-items: center;
 }
 
-@media only screen and (max-width: 1600px) {
+@media only screen and (max-width: 1510px) {
+  #board {
+    max-width: 744px;
+  }
   #board > :nth-child(1) {order: 2;}
   #board > :nth-child(2) {order: 1;}
   #board > :nth-child(3) {order: 3;}
