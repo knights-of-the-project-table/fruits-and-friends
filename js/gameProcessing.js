@@ -185,7 +185,13 @@ function disableTiles() {
 }
 
 function setCurrentPlayerStatus() {
-  gameStatus.innerText = `Player ${currentPlayer}'s Turn`;
+  let currentPlayerName = '';
+  if (currentPlayer === 1) {
+    currentPlayerName = playerOne;
+  } else {
+    currentPlayerName = playerTwo;
+  }
+  gameStatus.innerText = `${currentPlayerName}'s Turn`;
 }
 
 // This function awaits a timed-out promise that calculates the CPU's next move. This is done to give the player a sense of rhythm when the CPU moves, and to make sure that the player token is painted in the browser in the makeMove function before the CPU token is added to the board.
