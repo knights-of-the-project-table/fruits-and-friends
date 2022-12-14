@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/main.css">
     <title>Fruits and Friends</title>
 </head>
+
 <body>
     <!-- content inside sidebar -->
     <div id="mySidebar" class="sidebar">
@@ -20,7 +21,8 @@
     <header>
         <div class="intro">
             <h1 class="logo-header">
-                <span class="logo">Fruits</span><span class="logo">&Friends</span>
+               <span class="logo"><img id="logo-header-fruits" src="img/assets/logo/fruits.png"></span> <span class="logo"><img
+                     id="logo-header-friends" src="img/assets/logo/and-friends.png"></span> <span class="logo"><img id="logo-header-icons" src="img/assets/logo/icons.png"></span>
             </h1>
         </div>
         <section id="header1">
@@ -49,7 +51,7 @@
                     <li><a href="aboutUs.html">About Us</a></li>
                 </ul>
             </nav>
-           
+
         </section>
     </header>
     <main>
@@ -62,7 +64,7 @@
         <!-- display scoreboard -->
         <div id="scoreBoard">
             <div class="playerScore">
-                <h2>P1</h2>
+                <h2 id="submittedName">P1</h2>
                 <div id="playerOneScore">
                     0
                 </div>
@@ -72,7 +74,7 @@
                 <div id="playerTwoScore">
                     0
                 </div>
-                <h2>P2</h2>
+                <h2 id="submittedName2">P2</h2>
             </div>
         </div>
         <!-- display game status -->
@@ -87,9 +89,13 @@
         <section id="board">
             <div class="playerAvatar">
                 <img src="https://place-hold.it/150x150/000/fff">
-                <h3><label for="username">Player 1:</label>
-                    <input type="text" name="username" id="username"></h3>
-                    <button type="submit">Submit</button>
+                <div>
+                    <h3>Player 1:</h3>
+                    <form id="userName">
+                        <input type="text" name="nameText" id="userName" size="15">
+                        <button id="myButton">Button</button>
+                    </form>
+                </div>
             </div>
 
             <section id="grid">
@@ -113,9 +119,13 @@
 
             <div class="playerAvatar">
                 <img src="https://place-hold.it/150x150/000/fff">
-                <h3><label for="username">Player 2:</label>
-                    <input type="text" name="username" id="username"></h3>
-                    <button type="submit">Submit</button>
+                <div>
+                    <h3>Player 2:</h3>
+                    <form id="userName2">
+                        <input type="text" name="nameText2" id="userName2" size="15">
+                        <button id="myButton2">Button</button>
+                    </form>
+                </div>
             </div>
         </section>
         <div id="resetButtonContainer">
@@ -126,9 +136,9 @@
 
     </footer>
 
+    <script src="js/main.js"></script>
     <script src="js/gameArtifacts.js"></script>
     <script src="js/gameProcessing.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/gameAI.js"></script>
 </body>
 
