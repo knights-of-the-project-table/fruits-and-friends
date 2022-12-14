@@ -28,19 +28,19 @@
         <section id="header1">
             <section id="headerLogo">
                 <div>
-                    <img id="img1" src="img/assets/header-images/kangaroo.png" />
+                    <img id="headerLogoKangaroo" src="img/assets/header-images/kangaroo.png" />
                 </div>
                 <div>
-                    <img id="img2" src="img/assets/header-images/watermelon.png" />
+                    <img id="headerLogoWatermelon" src="img/assets/header-images/watermelon.png" />
                 </div>
                 <div class="heading">
                     <h1>Fruits & Friends</h1>
                 </div>
                 <div>
-                    <img id="img3" src="img/assets/header-images/strawberry.png" />
+                    <img id="headerLogoStrawberry" src="img/assets/header-images/strawberry.png" />
                 </div>
                 <div>
-                    <img id="img4" src="img/assets/header-images/dragon.png" />
+                    <img id="headerLogoDragon" src="img/assets/header-images/dragon.png" />
                 </div>
             </section>
         </section>
@@ -56,8 +56,8 @@
     </header>
     <main>
         <nav id="gameOptions">
-            <button class="gameOptionButtons" id="playerGameButton">2 Player Game</button>
-            <button class="gameOptionButtons" id="playMachine">1 Player Game</button>
+            <button class="gameOptionButtons" id="onePlayerGameButton">1 Player Game</button>
+            <button class="gameOptionButtons" id="twoPlayerGameButton">2 Player Game</button>
         </nav>
         <!-- opens game rules sidebar -->
         <button class="openButton" onclick="openNav()">&#9776; Game<br>Rules</button>
@@ -81,19 +81,14 @@
 
         <p id="gameStatus"></p>
 
-        <!-- display Removed Tile -->
-        <div id="removedTileContainer">
-            <img id="removedTile">
-        </div>
         <!-- display player icon -->
         <section id="board">
             <div class="playerAvatar">
-                <img src="https://place-hold.it/150x150/000/fff">
+                <h3>Player 1</h3>
+                <img id="playerOneAvatarImg" src="img/assets/player-tokens/black-token-player-1.png">
                 <div>
-                    <h3>Player 1:</h3>
                     <form id="userName">
-                        <input type="text" name="nameText" id="userName" size="15">
-                        <button id="myButton">Button</button>
+                        <input type="text" name="nameText" id="userName" size="15" placeholder="Enter your name">
                     </form>
                 </div>
             </div>
@@ -118,12 +113,11 @@
             </section>
 
             <div class="playerAvatar">
-                <img src="https://place-hold.it/150x150/000/fff">
+                <h3>Player 2</h3>
+                <img id="playerTwoAvatarImg" src="img/assets/player-tokens/red-token-player-2.png">
                 <div>
-                    <h3>Player 2:</h3>
-                    <form id="userName2">
-                        <input type="text" name="nameText2" id="userName2" size="15">
-                        <button id="myButton2">Button</button>
+                    <form id="userName">
+                        <input type="text" name="nameText" id="userName" size="15" placeholder="Enter your name">
                     </form>
                 </div>
             </div>
