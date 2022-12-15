@@ -1,20 +1,19 @@
-'use strict'
+'use strict';
 
 // Sidebar functionality //
 
-function openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-}
+// function openNav() {
+//   document.getElementById("mySidebar").style.width = "450px";
+// }
 
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-}
+// function closeNav() {
+//   document.getElementById("mySidebar").style.width = "0";
+// }
 
 
 // Splash screen //
 
 let intro = document.querySelector('.intro');
-let logo = document.querySelector('.logo-header');
 let logoSpan = document.querySelectorAll('.logo');
 
 // 'DOMContentLoaded' triggers all the functions when the DOM content has been loaded //
@@ -38,25 +37,23 @@ window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       intro.style.top = '-100vh';
     }, 2300);
-  })
-})
+  });
+});
 
+let sidebarButton = document.querySelector('.sidebarButton');
+let sidebar = document.querySelector('.sidebar');
+
+sidebarButton.addEventListener('click', function () {
+  sidebarButton.classList.toggle('buttonToggle');
+  sidebar.classList.toggle('buttonToggle');
+});
 
 // Username //
 
-// let input = document.getElementById("userName");
-
-// input.addEventListener("keypress", function(event) {
-//   if (event.key === 'Enter') {
-//     event.preventDefault();
-//     document.getElementById("myButton").onsecuritypolicyviolation();
-//   }
-// });
-
-let playerOne = '';
+let playerOne = 'Player 1';
 let submittedName = document.getElementById('submittedName');
 
-let userName = document.getElementById('userName');
+let userName = document.getElementById('userName1');
 userName.addEventListener('submit', logUserName);
 
 function logUserName(event) {
@@ -65,11 +62,10 @@ function logUserName(event) {
   playerOne = form.nameText.value;
   submittedName.innerText = playerOne;
   document.getElementById('gameStatus').innerText = `${playerOne}'s Turn`;
+  form.nameText.value = '';
 }
 
-
-
-let playerTwo = '';
+let playerTwo = 'Player 2';
 let submittedName2 = document.getElementById('submittedName2');
 
 let userName2 = document.getElementById('userName2');
@@ -80,7 +76,6 @@ function logUserName2(event) {
   let form = event.target;
   playerTwo = form.nameText2.value;
   submittedName2.innerText = playerTwo;
+  form.nameText.value = '';
 }
-
-
 

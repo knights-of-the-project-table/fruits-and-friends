@@ -12,35 +12,83 @@
 
 <body>
     <!-- content inside sidebar -->
-    <div id="mySidebar" class="sidebar">
-        <h2>Game Rules</h2>
+    <!-- <div id="mySidebar" class="sidebar">
         <a href="javascript:void(0)" class="closeButton" onclick="closeNav()">×</a>
-        <p>explanation of game rules</p>
-    </div>
+        <h3>How to Play</h3>
+        <div id="scroll">
+            <h4>Game Objectives</h4>
+            <p>The goal of the game is to achieve the following victory conditions:</p>
+            <ol>
+                <li>1. Line up your tokens in a horizontal, vertical, or diagonal row of 4.</li>
+                <li>2. Place your tokens in a 2 x 2 square.</li>
+                <li>3. Block your opponents so that they have no more legal moves remaining.</li>
+            </ol>
+            <p>explanation of game rules</p>
+        </div>
+    </div> -->
 
     <header>
         <div class="intro">
             <h1 class="logo-header">
-               <span class="logo"><img id="logo-header-fruits" src="img/assets/logo/fruits.png"></span> <span class="logo"><img
-                     id="logo-header-friends" src="img/assets/logo/and-friends.png"></span> <span class="logo"><img id="logo-header-icons" src="img/assets/logo/icons.png"></span>
+                <span class="logo"><img id="logo-header-fruits" src="img/assets/logo/fruits.png"></span> <span
+                    class="logo"><img id="logo-header-friends" src="img/assets/logo/and-friends.png"></span> <span
+                    class="logo"><img id="logo-header-icons" src="img/assets/logo/icons.png"></span>
             </h1>
         </div>
+
+        <div class="sidebar buttonToggle">
+            <button class="sidebarButton">&#9776; Game<br>Rules</button>
+            <h4>How to Play:</h4>
+            <div id="scroll">
+                <h5>Game Objectives</h5>
+                <p>The goal of the game is to achieve the following victory conditions:</p>
+                <p>1. Line up your tokens in a horizontal, vertical, or diagonal row of 4.</p>
+                <p>2. Place your tokens in a 2 x 2 square.</p>
+                <p>3. Block your opponents so that they have no more legal moves remaining.</p>
+                <h5>Game Play</h5>
+                <p>You have the option to choose to play a 1 player game or a 2 player game. If you select the 1 player
+                    game option, you will play against the computer. The 2 player game option will allow you to play
+                    with one other person. </p>
+                <p>There are 16 tiles, and each is composed of 2 elements, one fruit (banana, orange, strawberry,
+                    watermelon) and one animal friend (dog, dragon, kangaroo, turtle). The tiles are randomly arranged
+                    in a 4x4 grid to form the game board.</p>
+                <p>The game is turn-based. On your turn, select a tile to place your token on top of. Once a tile is
+                    selected, it is unplayable for the remainder of the game. If you are the first player, you must
+                    choose a tile that is on the outside border of the game board. This is only required for the first
+                    turn of the game. The next player must then place a token on a tile that shares an element in common
+                    with the tile that was selected in the previous turn.</p>
+                <p>On the following turns, continue to place tokens on tiles that have a common element with the tile
+                    selected by the previous player, while trying to arrange your tokens in one of the three victory
+                    conditions. The first player to achieve a victory condition wins the game!</p>
+                <h5>End of the Game</h5>
+                <p>The game ends when a player achieves one of the following victory conditions:</p>
+                <p>1. A vertical, horizontal or diagonal row of tokens.</p>
+                <img class="rulesIMG" src="img/assets/game-rules/fourRow.jpg">
+                <p>2. A 2 x 2 square of 4 tokens.</p>
+                <img class="rulesIMG" src="img/assets/game-rules/square.jpg">
+                <p>3. Blocking an opponent so that they have no legal moves remaining.</p>
+                <img class="rulesIMG" src="img/assets/game-rules/legalMoves.jpg">
+                <p>In this example, the last tile selected has a dog and watermelon on it. Since there are no more tiles
+                    remaining with either of those elements, Player 2 wins this game.</p>
+            </div>
+        </div>
+
         <section id="header1">
             <section id="headerLogo">
                 <div>
-                    <img id="img1" src="img/assets/header-images/kangaroo.png" />
+                    <img id="headerLogoKangaroo" src="img/assets/header-images/kangaroo.png" />
                 </div>
                 <div>
-                    <img id="img2" src="img/assets/header-images/watermelon.png" />
+                    <img id="headerLogoWatermelon" src="img/assets/header-images/watermelon.png" />
                 </div>
                 <div class="heading">
                     <h1>Fruits & Friends</h1>
                 </div>
                 <div>
-                    <img id="img3" src="img/assets/header-images/strawberry.png" />
+                    <img id="headerLogoStrawberry" src="img/assets/header-images/strawberry.png" />
                 </div>
                 <div>
-                    <img id="img4" src="img/assets/header-images/dragon.png" />
+                    <img id="headerLogoDragon" src="img/assets/header-images/dragon.png" />
                 </div>
             </section>
         </section>
@@ -56,11 +104,14 @@
     </header>
     <main>
         <nav id="gameOptions">
-            <button class="gameOptionButtons" id="playerGameButton">2 Player Game</button>
-            <button class="gameOptionButtons" id="playMachine">1 Player Game</button>
+            <button class="gameOptionButtons" id="onePlayerGameButton">1 Player Game</button>
+            <button class="gameOptionButtons" id="twoPlayerGameButton">2 Player Game</button>
         </nav>
         <!-- opens game rules sidebar -->
-        <button class="openButton" onclick="openNav()">&#9776; Game<br>Rules</button>
+        <!-- <button class="openButton" onclick="openNav()">&#9776; Game<br>Rules</button> -->
+
+
+
         <!-- display scoreboard -->
         <div id="scoreBoard">
             <div class="playerScore">
@@ -81,19 +132,15 @@
 
         <p id="gameStatus"></p>
 
-        <!-- display Removed Tile -->
-        <div id="removedTileContainer">
-            <img id="removedTile">
-        </div>
         <!-- display player icon -->
         <section id="board">
             <div class="playerAvatar">
-                <img src="https://place-hold.it/150x150/000/fff">
+                <h3>Player 1</h3>
+                <img id="playerOneAvatarImg" src="img/assets/player-tokens/black-token-player-1.png">
                 <div>
                     <h3>Player 1:</h3>
-                    <form id="userName">
-                        <input type="text" name="nameText" id="userName" placeholder="Enter your name here" size="15">
-                        <button id="myButton">Button</button>
+                    <form id="userName1">
+                        <input type="text" name="nameText" id="userName" size="15" placeholder="Enter your name">
                     </form>
                 </div>
             </div>
@@ -118,12 +165,11 @@
             </section>
 
             <div class="playerAvatar">
-                <img src="https://place-hold.it/150x150/000/fff">
+                <h3>Player 2</h3>
+                <img id="playerTwoAvatarImg" src="img/assets/player-tokens/red-token-player-2.png">
                 <div>
-                    <h3>Player 2:</h3>
                     <form id="userName2">
-                        <input type="text" name="nameText2" id="userName2" placeholder="Enter your name here" size="15">
-                        <button id="myButton2">Button</button>
+                        <input type="text" name="nameText2" id="userName" size="15" placeholder="Enter your name">
                     </form>
                 </div>
             </div>
