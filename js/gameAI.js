@@ -171,7 +171,8 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
         let fruit = cpuMoveBoard.linearBoard[move].fruit;
         let friend = cpuMoveBoard.linearBoard[move].friend;
 
-        let branchAvailableMoves =  deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend);
+        let branchAvailableMoves = [];
+        branchAvailableMoves = deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend);
         let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
         // console.log(branchAvailableMoves);
         // console.log(divePlayer);
@@ -208,6 +209,7 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
     }
 
     return (bestMoveScore);
+
 
 }
 
@@ -279,11 +281,12 @@ function cpuPlayerInitialize(){
 
     if (winLossDifference < 1){
         cpuDifficulty = 1;
-    } else if (winLossDifference > 8){
-        cpuDifficulty = 8;
+    } else if (winLossDifference >= 12){
+        cpuDifficulty = 12;
     } else {
-        cpuDifficulty = winLossDifference;
+        cpuDifficulty = winLossDifference + 1;
     }
+    console.log(cpuDifficulty);
 }
 
 // if (typeof window == "undefined"){
