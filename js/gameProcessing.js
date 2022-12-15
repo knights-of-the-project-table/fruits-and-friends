@@ -41,8 +41,8 @@ const WIN_CONDITIONS = [
   [[2, 2], [2, 3], [3, 2], [3, 3]],
 ];
 
-const gameStatus = document.getElementById('gameStatus');
-const gameTiles = document.querySelectorAll('.gameTile');
+let gameStatus = document.getElementById('gameStatus');
+let gameTiles = document.querySelectorAll('.gameTile');
 
 let availableMoves = [];
 let currentPlayer = 1;
@@ -51,8 +51,8 @@ let currentPlayer = 1;
 let cpuEnabled = true;
 
 // Sets up the board
-const gameBoardObj = newGameBoard();
-const gameBoard = gameBoardObj.board;
+let gameBoardObj = newGameBoard();
+let gameBoard = gameBoardObj.board;
 // Linear game board is used in the AI calculations
 const linearGameBoard = gameBoardObj.linearBoard;
 
@@ -60,24 +60,7 @@ const linearGameBoard = gameBoardObj.linearBoard;
 let playersObject = newPlayers();
 let players = playersObject.players;
 
-// Add each gameTile html element to the game board and create Event Handler
-gameTiles.forEach((gameTile, i) => {
-  const row = Math.floor(i / BOARD_WIDTH);
-  const column = i % BOARD_WIDTH;
-  gameBoard[row][column].button = gameTile;
-  // Before the game starts, each button is disabled
-  gameTile.disabled = true;
 
-  gameTile.id = i;
-  let image = document.createElement('img');
-  image.className = 'tileLayer';
-  image.src = gameBoard[row][column].imageSrc;
-  gameTile.appendChild(image);
-  gameTile.addEventListener('click', () => {
-    makeMove(row, column);
-  });
-
-});
 
 // Loads previous save state (if any) and starts the game
 function gameStart(){
@@ -213,19 +196,69 @@ function resolveAfterTimeout(timeOut) {
   });
 }
 
-// code to reset the entire gameBoard and remove all children from button
-const resetButton = document.getElementById('resetButton');
+// This function reset the game 
+const resetButtonEvent = () => {
 
-function eventReset(){
-  location.reload();
+  availableMoves = [];
+  currentPlayer = 1;
+  
+  for (let i = 0; i < gameBoardObj.linearBoard.length; i++){
+    gameBoardObj.linearBoard[i].occupiedBy = null;
+  }
+
+  gameBoardObj = newGameBoard();
+  gameBoard = gameBoardObj.board;
+  
+  // Add each gameTile html element to the game board and create Event Handler
+  gameTiles.forEach((gameTile, i) => {
+    const row = Math.floor(i / BOARD_WIDTH);
+    const column = i % BOARD_WIDTH;
+    gameBoard[row][column].button = gameTile;
+    // Before the game starts, each button is disabled
+    gameTile.disabled = true;
+
+    gameTile.id = i;
+    let image = document.createElement('img');
+    image.className = 'tileLayer';
+    image.src = gameBoard[row][column].imageSrc;
+    gameTile.appendChild(image);
+    gameTile.addEventListener('click', () => {
+      makeMove(row, column);
+    });
+
+  });
+  localStorage.clear('savedAvailableMoves');
+  localStorage.clear('savedGameBoardState');
+  localStorage.clear('savedCurrentPlayer');
+  
+  gameStart();
+
 }
 
-resetButton.addEventListener('click', eventReset);
+const singlePlayerGame = () => {
+  cpuEnabled = false;
+  resetButtonEvent();
+}
+
+const versusCPU = () => {
+  cpuEnabled = true;
+  resetButtonEvent();
+}
+
+const resetButton = document.getElementById('resetButton');
+
+resetButton.addEventListener('click', resetButtonEvent);
+
+const singlePlayerButton = document.getElementById('playerGameButton');
+
+singlePlayerButton.addEventListener('click', singlePlayerGame);
+
+const playMachineButton = document.getElementById('playMachine');
+
+playMachineButton.addEventListener('click', versusCPU);
+
 
 // **************************
 // **** For Testing Only*****
 // **************************
-gameStart();
-
-
-
+// gameStart();
