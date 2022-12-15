@@ -214,14 +214,18 @@ const resetButtonEvent = () => {
     const row = Math.floor(i / BOARD_WIDTH);
     const column = i % BOARD_WIDTH;
     gameBoard[row][column].button = gameTile;
+    // Make sure the current default or previous game tiles are removed
+    removeAllChildNodes(gameTile);
     // Before the game starts, each button is disabled
     gameTile.disabled = true;
-
     gameTile.id = i;
     let image = document.createElement('img');
     image.className = 'tileLayer';
     image.src = gameBoard[row][column].imageSrc;
     gameTile.appendChild(image);
+    gameTile.removeEventListener('click', () => {
+      makeMove(row, column);
+    })
     gameTile.addEventListener('click', () => {
       makeMove(row, column);
     });
@@ -233,6 +237,13 @@ const resetButtonEvent = () => {
   
   gameStart();
 
+}
+
+// This function removes all child nodes from an element
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
 }
 
 const singlePlayerGame = () => {
@@ -249,16 +260,10 @@ const resetButton = document.getElementById('resetButton');
 
 resetButton.addEventListener('click', resetButtonEvent);
 
-const singlePlayerButton = document.getElementById('playerGameButton');
+const singlePlayerButton = document.getElementById('twoPlayerGameButton');
 
 singlePlayerButton.addEventListener('click', singlePlayerGame);
 
-const playMachineButton = document.getElementById('playMachine');
+const playMachineButton = document.getElementById('onePlayerGameButton');
 
 playMachineButton.addEventListener('click', versusCPU);
-
-
-// **************************
-// **** For Testing Only*****
-// **************************
-// gameStart();
