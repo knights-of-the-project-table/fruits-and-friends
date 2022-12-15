@@ -179,17 +179,17 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
         if (divePlayer === 2 && bestMoveScore < moveScore){           
             bestMoveScore = moveScore;
             testMove = diveAvailableMoves[i];
-            if (bestMoveScore === (100 + depthShift)){
-                return bestMoveScore;
-            }
+            // if (bestMoveScore === (100 + depthShift)){
+            //     return bestMoveScore;
+            // }
         }
 
         if (divePlayer === 1 && bestMoveScore > moveScore){            
             bestMoveScore = moveScore;
             testMove = diveAvailableMoves[i];
-            if (bestMoveScore === (100 - depthShift)){
-                return bestMoveScore;
-            }
+            // if (bestMoveScore === (100 - depthShift)){
+            //     return bestMoveScore;
+            // }
         }
 
         // if (depthShift === 0){
@@ -221,6 +221,8 @@ function cpuPlayerMoveGenerator(){
     let bestMoveScore = -1000;  // To approximate -infinity flag for alpha-beta method
     let bestMoveIndex = 0;      // Index of move with highest value
 
+    // console.log(linearGameBoard);
+
     //  Loop through all current valid moves and finds the move with the best possible outcome
     for (let i = 0; i < availableMoves.length; i++){
         let moveScore = 0;
@@ -228,11 +230,18 @@ function cpuPlayerMoveGenerator(){
         let move = moveCoords[0] * 4 + moveCoords[1];
         let boardSeed = new AIBoard(linearGameBoard);       // Makes a copy of the current board for simulated moves
 
+
+
         // Makes simulated move
         boardSeed.linearBoard[move].occupiedBy = 2;
         let fruit = boardSeed.linearBoard[move].fruit;
         let friend = boardSeed.linearBoard[move].friend;
         let diveAvailableMoves = deepDiveAvailableMoves(boardSeed.linearBoard, fruit, friend);
+
+        // console.log(moveCoords);
+        // console.log(move);
+        // console.log(linearGameBoard);
+        // console.log(boardSeed.linearBoard);
 
         // Calls on deepDive() to return a score for that particular move branch
         // Function does depth-first search out of all possible moves up to 'cpuDifficulty' layers
@@ -250,10 +259,12 @@ function cpuPlayerMoveGenerator(){
         // }
     }
 
+
     row = availableMoves[bestMoveIndex][0] ;
     column = availableMoves[bestMoveIndex][1];
 
     // console.log(`Possible move scores: ${moveScoreArray}`);
+    // console.log(`Current board: ${linearGameBoard}`);
     // console.log(`Possible moves: ${availableMoves}`);
     console.log(`Best move score: ${bestMoveScore}`);
     console.log(`Picked move: ${[row, column]}`);

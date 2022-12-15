@@ -54,7 +54,7 @@ let cpuEnabled = true;
 let gameBoardObj = newGameBoard();
 let gameBoard = gameBoardObj.board;
 // Linear game board is used in the AI calculations
-const linearGameBoard = gameBoardObj.linearBoard;
+let linearGameBoard = gameBoardObj.linearBoard;
 
 // Sets up players
 let playersObject = newPlayers();
@@ -201,13 +201,18 @@ const resetButtonEvent = () => {
 
   availableMoves = [];
   currentPlayer = 1;
-  
+
   for (let i = 0; i < gameBoardObj.linearBoard.length; i++){
     gameBoardObj.linearBoard[i].occupiedBy = null;
   }
 
   gameBoardObj = newGameBoard();
   gameBoard = gameBoardObj.board;
+  linearGameBoard = gameBoardObj.linearBoard;
+
+
+
+
   
   // Add each gameTile html element to the game board and create Event Handler
   gameTiles.forEach((gameTile, i) => {
@@ -229,7 +234,6 @@ const resetButtonEvent = () => {
     gameTile.addEventListener('click', () => {
       makeMove(row, column);
     });
-
   });
   localStorage.clear('savedAvailableMoves');
   localStorage.clear('savedGameBoardState');
