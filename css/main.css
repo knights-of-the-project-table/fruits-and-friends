@@ -278,8 +278,8 @@ header {
 #scroll {
   font-size: 23px;
   line-height: 35px;
-  padding: 2rem;
-  height: 90%;
+  padding: 1rem;
+  height: 93%;
   overflow: scroll;
 }
 
