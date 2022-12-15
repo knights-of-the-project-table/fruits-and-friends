@@ -97,7 +97,6 @@ function resetAll(){
 class GameBoard{
   constructor(){
     this.board = [];
-
     this.linearBoard = [];
     this.generate();
   }

@@ -54,7 +54,7 @@ let cpuEnabled = true;
 let gameBoardObj = newGameBoard();
 let gameBoard = gameBoardObj.board;
 // Linear game board is used in the AI calculations
-const linearGameBoard = gameBoardObj.linearBoard;
+let linearGameBoard = gameBoardObj.linearBoard;
 
 // Sets up players
 let playersObject = newPlayers();
@@ -222,8 +222,6 @@ const resetButtonEvent = () => {
     gameBoard[row][column].button = gameTile;
     // Make sure the current default or previous game tiles are removed
     removeAllChildNodes(gameTile);
-    // Before the game starts, each button is disabled
-    gameTile.disabled = true;
     gameTile.id = i;
     let image = document.createElement('img');
     image.className = 'tileLayer';
@@ -231,6 +229,7 @@ const resetButtonEvent = () => {
     gameTile.appendChild(image);
     gameTile.addEventListener('click', makeMoveEvent);
   });
+
   localStorage.clear('savedAvailableMoves');
   localStorage.clear('savedGameBoardState');
   localStorage.clear('savedCurrentPlayer');
@@ -264,3 +263,22 @@ onePlayerGameButton.addEventListener('click', versusCPU);
 const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
 twoPlayerGameButton.addEventListener('click', singlePlayerGame);
 
+// This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
+function onPageLoad() {
+  renderDefaultBoard();
+}
+
+function renderDefaultBoard() {
+  // For each game tile button, load the corresponding tile from the ordered set of the gameBoardTiles array from gameArtifacts.js
+  gameTiles.forEach((gameTile, i) => {
+    // Before the game starts, each button is disabled
+    gameTile.disabled = true;
+    let image = document.createElement('img');
+    image.className = 'tileLayer';
+    image.src = gameBoardTiles[i].imageSrc;
+    gameTile.appendChild(image);
+    gameStatus.innerText = 'Choose a game type to begin!'
+  });
+}
+
+onPageLoad();
