@@ -44,11 +44,10 @@ const WIN_CONDITIONS = [
 let gameStatus = document.getElementById('gameStatus');
 let gameTiles = document.querySelectorAll('.gameTile');
 let savedGameFile = false;
-
 let availableMoves = [];
 let currentPlayer = 1;
 
-// Flag to enable / disable cpu player
+// Flag to enable / disable cpu player - initialize to true
 let cpuEnabled = true;
 
 // Sets up the board
@@ -61,11 +60,9 @@ let linearGameBoard = gameBoardObj.linearBoard;
 let playersObject = newPlayers();
 let players = playersObject.players;
 
-// Loads previous save state (if any) and starts the game
+// Starts the game by initializing current available moves
 function gameStart(){
-  // Three objects loaded from saved state: Board, availableMoves[], current tile
-
-  if (!savedGameFile) {
+  if (availableMoves.length === 0) {
     initializeMoves();
   }
   setCurrentPlayerStatus();
@@ -135,7 +132,7 @@ function makeMove(row, column) {
 
   // If the CPU is enabled, asynchronously call the CPU move
   if (cpuEnabled && currentPlayer === 2) {
-    asyncCpuMove();
+    asyncCpuMove(2000);
   }
 
   saveGameBoard(gameBoard);
@@ -204,8 +201,7 @@ function setCurrentPlayerStatus() {
 }
 
 // This function awaits a timed-out promise that calculates the CPU's next move. This is done to give the player a sense of rhythm when the CPU moves, and to make sure that the player token is painted in the browser in the makeMove function before the CPU token is added to the board.
-async function asyncCpuMove() {
-  const timeOutInterval = 2000;
+async function asyncCpuMove(timeOutInterval) {
   const move = await resolveAfterTimeout(timeOutInterval);
   const row = move[0];
   const column = move[1];
@@ -222,13 +218,8 @@ function resolveAfterTimeout(timeOut) {
   });
 }
 
-// This function reset the game 
-const resetButtonEvent = () => {
-
-  localStorage.clear('savedAvailableMoves');
-  localStorage.clear('savedGameBoardState');
-  localStorage.clear('savedCurrentPlayer');
-  savedGameFile = false;
+// This function starts a new game 
+const newGameButtonEvent = () => {
 
     availableMoves = [];
     currentPlayer = 1;
@@ -257,9 +248,12 @@ const resetButtonEvent = () => {
     gameTile.addEventListener('click', makeMoveEvent);
   });
 
-
-  
   gameStart();
+  saveGameBoard(gameBoard);
+  savePlayers(players);
+  saveAvailableMoves(availableMoves);
+  saveCurrentPlayer(currentPlayer);
+  saveOnePlayerOrTwo(cpuEnabled); 
 }
 
 const savedGameEvent = () => {
@@ -270,8 +264,6 @@ const savedGameEvent = () => {
   playersObject = restorePlayers();
   cpuEnabled = restoreOnePlayerOrTwo();
   players = playersObject.players;
-
-  console.log(cpuEnabled);
 
   gameBoard = gameBoardObj.board;
   linearGameBoard = gameBoardObj.linearBoard;
@@ -299,7 +291,14 @@ const savedGameEvent = () => {
 
   });
   
-  gameStart();
+  // If the CPU is enabled and was calculating it's move when the browser closed or was refreshed, it needs to perform its move, otherwise continue the game as usual
+  if (cpuEnabled && currentPlayer === 2) {
+    disableTiles()
+    setCurrentPlayerStatus();
+    asyncCpuMove(4000);
+  } else {
+    gameStart();
+  }
 }
 
 // This function removes all child nodes from an element
@@ -309,24 +308,24 @@ function removeAllChildNodes(parent) {
   }
 }
 
-const twoPlayerGame = () => {
-  clearForNewGame();
-  cpuEnabled = false;
-  saveOnePlayerOrTwo(cpuEnabled);
-  resetPlayers();
-  resetButtonEvent();
-}
-
 const versusCPU = () => {
   clearForNewGame();
-  cpuEnabled = true;
-  saveOnePlayerOrTwo(cpuEnabled);  
-  resetButtonEvent();
+  cpuEnabled = true; 
+  newGameButtonEvent();
   cpuPlayerInitialize();
 }
 
-const resetButton = document.getElementById('resetButton');
-resetButton.addEventListener('click', resetButtonEvent);
+const twoPlayerGame = () => {
+  clearForNewGame();
+  cpuEnabled = false;
+  resetPlayers();
+  newGameButtonEvent();
+}
+
+const resetGame = () => {
+  clearForNewGame();
+  newGameButtonEvent();
+}
 
 const onePlayerGameButton = document.getElementById('onePlayerGameButton');
 onePlayerGameButton.addEventListener('click', versusCPU);
@@ -334,9 +333,15 @@ onePlayerGameButton.addEventListener('click', versusCPU);
 const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
 twoPlayerGameButton.addEventListener('click', twoPlayerGame);
 
+const resetButton = document.getElementById('resetButton');
+resetButton.addEventListener('click', resetGame);
+
 // This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
 function onPageLoad() {
-  savedGameFile = Boolean(restoreCurrentPlayer());
+  if (restoreCurrentPlayer()) {
+    savedGameFile = true;
+  }
+
   if (savedGameFile){
     savedGameEvent();
   } else {

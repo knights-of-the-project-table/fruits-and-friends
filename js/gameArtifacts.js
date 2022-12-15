@@ -92,24 +92,18 @@ function restoreCurrentPlayer(){
 
 function saveOnePlayerOrTwo(cpuEnabled){
   localStorage.setItem('cpuEnabledFlag', JSON.stringify(cpuEnabled));
-  console.log(JSON.stringify(cpuEnabled));
-  console.log(JSON.parse(localStorage.getItem('cpuEnabledFlag')));
 }
 
 function restoreOnePlayerOrTwo(){
-  let storedCPUParams = JSON.parse(localStorage.getItem('cpuEnabledFlag'));
-  console.log(JSON.parse(localStorage.getItem('cpuEnabledFlag')));
+  let storedCPUParams = Boolean(JSON.parse(localStorage.getItem('cpuEnabledFlag')));
   return storedCPUParams;
-}
-
-function resetAll(){
-  localStorage.clear();
 }
 
 function clearForNewGame(){
   localStorage.clear('savedAvailableMoves');
   localStorage.clear('savedCurrentPlayer');
   localStorage.clear('savedGameBoardState');
+  localStorage.clear('cpuEnabledFlag');
 }
 
 class GameBoard{
