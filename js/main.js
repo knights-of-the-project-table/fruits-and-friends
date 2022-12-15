@@ -2,13 +2,13 @@
 
 // Sidebar functionality //
 
-function openNav() {
-  document.getElementById("mySidebar").style.width = "250px";
-}
+// function openNav() {
+//   document.getElementById("mySidebar").style.width = "450px";
+// }
 
-function closeNav() {
-  document.getElementById("mySidebar").style.width = "0";
-}
+// function closeNav() {
+//   document.getElementById("mySidebar").style.width = "0";
+// }
 
 
 // Splash screen //
@@ -40,6 +40,13 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+let sidebarButton = document.querySelector('.sidebarButton');
+let sidebar = document.querySelector('.sidebar');
+
+sidebarButton.addEventListener('click', function () {
+  sidebarButton.classList.toggle('buttonToggle');
+  sidebar.classList.toggle('buttonToggle');
+});
 
 // Username //
 
@@ -71,5 +78,4 @@ function logUserName2(event) {
   submittedName2.innerText = playerTwo;
   form.nameText.value = '';
 }
-
 
