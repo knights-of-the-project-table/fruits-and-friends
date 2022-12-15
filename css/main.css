@@ -238,52 +238,6 @@ header {
 
 /* Side Bar;
 ==================================================*/
-
-/* .sidebar {
-  width: 0;
-  position: fixed;
-  z-index: 4;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  background-color: #99c1b9;
-  overflow-x: hidden;
-  transition: 0.5s;
-  padding-top: 40px;
-  border-radius: 10px;
-
-/* .closeButton {
-  position: absolute;
-  top: 0;
-  right: 15px;
-  font-size: 36px;
-}
-
-#scroll {
-  font-size: 23px;
-  height: 100%;
-  overflow: scroll;
-  white-space: nowrap;
-} */
-
-/* .openButton {
-  font-size: 13px;
-  text-align: right;
-  background-color: #99c1b9;
-  color: black;
-  padding: 8px;
-  padding-left: 0px;
-  border-radius: 0px 10px 10px 0px;
-  position: fixed;
-  left: 0;
-  top: 40%;
-} */
-
-/* .openButton:hover {
-  background-color: #444;
-} */
-
-
 .sidebarButton {
   font-size: 13px;
   text-align: right;
@@ -301,17 +255,15 @@ header {
   top: 40%;
 }
 
-.sidebarButton .buttonToggle {
-  transform: translateX(50px);
-}
 
-.sidebar {
+.sidebarContent {
   /* display: none; */
+  z-index: 1;
   width: 450px;
   background-color: #99c1b9;
   transition: 0.5s;
   padding-top: 40px;
-  border-radius: 10px;
+  border-radius: 0px 10px 10px 0px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -320,14 +272,14 @@ header {
 
 .sidebar .buttonToggle {
   transform: translatex(-450px);
-  /* display: initial; */
+  display: initial;
 }
 
 #scroll {
   font-size: 23px;
-  line-height: 30px;
-  height: 100%;
+  line-height: 35px;
   padding: 1rem;
+  height: 93%;
   overflow: scroll;
 }
 
@@ -350,9 +302,10 @@ h5 {
 }
 
 .rulesIMG {
-  width: 400px;
-  height: 400px;
-  margin: 1rem;
+  width: 370px;
+  height: 370px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;;
 }
 
 .sidebarButton:hover {

@@ -1,16 +1,5 @@
 'use strict';
 
-// Sidebar functionality //
-
-// function openNav() {
-//   document.getElementById("mySidebar").style.width = "450px";
-// }
-
-// function closeNav() {
-//   document.getElementById("mySidebar").style.width = "0";
-// }
-
-
 // Splash screen //
 
 let intro = document.querySelector('.intro');
@@ -40,11 +29,15 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+// Sidebar functionality //
+
 let sidebarButton = document.querySelector('.sidebarButton');
+let sidebarContent = document.querySelector('.sidebarContent');
 let sidebar = document.querySelector('.sidebar');
 
 sidebarButton.addEventListener('click', function () {
   sidebarButton.classList.toggle('buttonToggle');
+  sidebarContent.classList.toggle('buttonToggle');
   sidebar.classList.toggle('buttonToggle');
 });
 
