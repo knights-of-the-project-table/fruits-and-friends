@@ -255,6 +255,23 @@ li a:hover {
   background-color: #444;
 }
 
+/* Form;
+==================================================*/
+
+#myButton {
+  display: none;
+}
+
+#myButton2 {
+  display: none;
+}
+
+input {
+  background-color: #8E7DBE;
+  font-size: 16px;
+  border: solid 3px  #D88C9A;
+}
+
 /* Game Board;
 ==================================================*/
 #gameOptions {

@@ -67,11 +67,6 @@ function logUserName(event) {
   document.getElementById('gameStatus').innerText = `${playerOne}'s Turn`;
 }
 
-// document.getElementById('userName').onkeydown = function (e) {
-//   if (e.keyCode == 13) {
-//   }
-// };
-
 
 
 let playerTwo = '';
@@ -86,11 +81,6 @@ function logUserName2(event) {
   playerTwo = form.nameText2.value;
   submittedName2.innerText = playerTwo;
 }
-
-// document.getElementById('userName2').onkeydown = function (e) {
-//   if (e.keyCode == 13) {
-//   }
-// };
 
 
 
