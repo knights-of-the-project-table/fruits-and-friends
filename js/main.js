@@ -79,4 +79,3 @@ function logUserName2(event) {
   form.nameText.value = '';
 }
 
-
