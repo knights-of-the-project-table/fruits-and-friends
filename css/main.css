@@ -263,7 +263,7 @@ header {
   background-color: #99c1b9;
   transition: 0.5s;
   padding-top: 40px;
-  border-radius: 10px;
+  border-radius: 0px 10px 10px 0px;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -277,9 +277,9 @@ header {
 
 #scroll {
   font-size: 23px;
-  line-height: 30px;
-  height: 100%;
-  padding: 1rem;
+  line-height: 35px;
+  padding: 2rem;
+  height: 90%;
   overflow: scroll;
 }
 
@@ -302,9 +302,10 @@ h5 {
 }
 
 .rulesIMG {
-  width: 400px;
-  height: 400px;
-  margin: 1rem;
+  width: 370px;
+  height: 370px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;;
 }
 
 .sidebarButton:hover {
