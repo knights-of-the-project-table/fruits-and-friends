@@ -60,8 +60,6 @@ const linearGameBoard = gameBoardObj.linearBoard;
 let playersObject = newPlayers();
 let players = playersObject.players;
 
-
-
 // Loads previous save state (if any) and starts the game
 function gameStart(){
   // Three objects loaded from saved state: Board, availableMoves[], current tile
@@ -82,7 +80,15 @@ function initializeMoves(){
   }
 }
 
-// Event Handler for clicking on a tile
+// Event Handler for clicking on a tile. This is made as an intermediate step because asyncCpuMove calls makeMove with row and column arguments
+function makeMoveEvent(event) {
+  const index = Number(event.currentTarget.id);
+  const row = Math.floor(index / BOARD_WIDTH);
+  const column = index % BOARD_WIDTH;
+  makeMove(row, column)
+}
+
+// Function that performs moves and updates the game board with token images, as well as checking for game win state.
 function makeMove(row, column) {
   gameBoard[row][column].occupiedBy = currentPlayer;
   let fruit = gameBoard[row][column].fruit;
@@ -223,20 +229,13 @@ const resetButtonEvent = () => {
     image.className = 'tileLayer';
     image.src = gameBoard[row][column].imageSrc;
     gameTile.appendChild(image);
-    gameTile.removeEventListener('click', () => {
-      makeMove(row, column);
-    })
-    gameTile.addEventListener('click', () => {
-      makeMove(row, column);
-    });
-
+    gameTile.addEventListener('click', makeMoveEvent);
   });
   localStorage.clear('savedAvailableMoves');
   localStorage.clear('savedGameBoardState');
   localStorage.clear('savedCurrentPlayer');
   
   gameStart();
-
 }
 
 // This function removes all child nodes from an element
@@ -257,13 +256,11 @@ const versusCPU = () => {
 }
 
 const resetButton = document.getElementById('resetButton');
-
 resetButton.addEventListener('click', resetButtonEvent);
 
-const singlePlayerButton = document.getElementById('twoPlayerGameButton');
+const onePlayerGameButton = document.getElementById('onePlayerGameButton');
+onePlayerGameButton.addEventListener('click', versusCPU);
 
-singlePlayerButton.addEventListener('click', singlePlayerGame);
+const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
+twoPlayerGameButton.addEventListener('click', singlePlayerGame);
 
-const playMachineButton = document.getElementById('onePlayerGameButton');
-
-playMachineButton.addEventListener('click', versusCPU);
