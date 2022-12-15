@@ -216,6 +216,7 @@ li a:hover {
 
 /* Side Bar;
 ==================================================*/
+
 .sidebar {
   width: 0;
   position: fixed;
@@ -255,22 +256,14 @@ li a:hover {
   background-color: #444;
 }
 
-/* Form;
+/* Form 
 ==================================================*/
-
-#myButton {
-  display: none;
-}
-
-#myButton2 {
-  display: none;
-}
-
 input {
   background-color: #8E7DBE;
   font-size: 16px;
   border: solid 3px  #D88C9A;
 }
+
 
 /* Game Board;
 ==================================================*/
