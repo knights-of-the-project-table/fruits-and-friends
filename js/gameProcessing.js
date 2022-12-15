@@ -43,6 +43,7 @@ const WIN_CONDITIONS = [
 
 let gameStatus = document.getElementById('gameStatus');
 let gameTiles = document.querySelectorAll('.gameTile');
+let savedGameFile = false;
 
 let availableMoves = [];
 let currentPlayer = 1;
@@ -64,7 +65,9 @@ let players = playersObject.players;
 function gameStart(){
   // Three objects loaded from saved state: Board, availableMoves[], current tile
 
-  initializeMoves();
+  if (!savedGameFile) {
+    initializeMoves();
+  }
   setCurrentPlayerStatus();
   enableAvailableTiles();
 }
@@ -109,8 +112,21 @@ function makeMove(row, column) {
   gameBoard[row][column].button.appendChild(token);
 
   if (evaluateWin()) {
+    if (cpuEnabled){
+      if (currentPlayer === 1){
+        gameStatus.innerText = `You beat level ${cpuDifficulty}! Leveling up!`;
+      }else if (currentPlayer === 2){
+        gameStatus.innerText = `Deep Fish level ${cpuDifficulty} wins this round!`;
+      }
+
+    }else {
     gameStatus.innerText = `Player ${currentPlayer} Won!`;
+    }
+    players[currentPlayer-1].wins++;
+    players[currentPlayer%2].losses++;
+    savePlayers(players);
     disableTiles();
+    clearForNewGame();
     return;
   } else {
     currentPlayer = currentPlayer === 1 ? 2 : 1;
@@ -122,6 +138,10 @@ function makeMove(row, column) {
     asyncCpuMove();
   }
 
+  saveGameBoard(gameBoard);
+  savePlayers(players);
+  saveAvailableMoves(availableMoves);
+  saveCurrentPlayer(currentPlayer);
 }
 
 // Updates the availableMoves array with the next set of valid moves
@@ -205,20 +225,22 @@ function resolveAfterTimeout(timeOut) {
 // This function reset the game 
 const resetButtonEvent = () => {
 
-  availableMoves = [];
-  currentPlayer = 1;
+  localStorage.clear('savedAvailableMoves');
+  localStorage.clear('savedGameBoardState');
+  localStorage.clear('savedCurrentPlayer');
+  savedGameFile = false;
 
-  for (let i = 0; i < gameBoardObj.linearBoard.length; i++){
-    gameBoardObj.linearBoard[i].occupiedBy = null;
-  }
+    availableMoves = [];
+    currentPlayer = 1;
 
-  gameBoardObj = newGameBoard();
+    for (let i = 0; i < gameBoardObj.linearBoard.length; i++) {
+      gameBoardObj.linearBoard[i].occupiedBy = null;
+    }
+
+    gameBoardObj = newGameBoard();
+
   gameBoard = gameBoardObj.board;
   linearGameBoard = gameBoardObj.linearBoard;
-
-
-
-
   
   // Add each gameTile html element to the game board and create Event Handler
   gameTiles.forEach((gameTile, i) => {
@@ -235,9 +257,47 @@ const resetButtonEvent = () => {
     gameTile.addEventListener('click', makeMoveEvent);
   });
 
-  localStorage.clear('savedAvailableMoves');
-  localStorage.clear('savedGameBoardState');
-  localStorage.clear('savedCurrentPlayer');
+
+  
+  gameStart();
+}
+
+const savedGameEvent = () => {
+
+  gameBoardObj = restoreGameBoard();
+  availableMoves = restoreAvailableMoves();
+  currentPlayer = restoreCurrentPlayer();
+  playersObject = restorePlayers();
+  cpuEnabled = restoreOnePlayerOrTwo();
+  players = playersObject.players;
+
+  console.log(cpuEnabled);
+
+  gameBoard = gameBoardObj.board;
+  linearGameBoard = gameBoardObj.linearBoard;
+
+  // Add each gameTile html element to the game board and create Event Handler
+  gameTiles.forEach((gameTile, i) => {
+    const row = Math.floor(i / BOARD_WIDTH);
+    const column = i % BOARD_WIDTH;
+    gameBoard[row][column].button = gameTile;
+    // Make sure the current default or previous game tiles are removed
+    removeAllChildNodes(gameTile);
+    gameTile.id = i;
+    let image = document.createElement('img');
+    image.className = 'tileLayer';
+    image.src = gameBoard[row][column].imageSrc;
+    gameTile.appendChild(image);
+    gameTile.addEventListener('click', makeMoveEvent);
+
+    if (gameBoard[row][column].occupiedBy) {
+      let token = document.createElement('img');
+      token.src = players[gameBoard[row][column].occupiedBy - 1].playerToken;
+      token.className = 'tokenLayer';
+      gameBoard[row][column].button.appendChild(token);
+    }
+
+  });
   
   gameStart();
 }
@@ -249,14 +309,20 @@ function removeAllChildNodes(parent) {
   }
 }
 
-const singlePlayerGame = () => {
+const twoPlayerGame = () => {
+  clearForNewGame();
   cpuEnabled = false;
+  saveOnePlayerOrTwo(cpuEnabled);
+  resetPlayers();
   resetButtonEvent();
 }
 
 const versusCPU = () => {
+  clearForNewGame();
   cpuEnabled = true;
+  saveOnePlayerOrTwo(cpuEnabled);  
   resetButtonEvent();
+  cpuPlayerInitialize();
 }
 
 const resetButton = document.getElementById('resetButton');
@@ -266,11 +332,16 @@ const onePlayerGameButton = document.getElementById('onePlayerGameButton');
 onePlayerGameButton.addEventListener('click', versusCPU);
 
 const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
-twoPlayerGameButton.addEventListener('click', singlePlayerGame);
+twoPlayerGameButton.addEventListener('click', twoPlayerGame);
 
 // This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
 function onPageLoad() {
-  renderDefaultBoard();
+  savedGameFile = Boolean(restoreCurrentPlayer());
+  if (savedGameFile){
+    savedGameEvent();
+  } else {
+    renderDefaultBoard();
+  }
 }
 
 function renderDefaultBoard() {
