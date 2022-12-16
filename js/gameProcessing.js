@@ -322,11 +322,10 @@ function removeAllChildNodes(parent) {
 const versusCPU = () => {
   clearForNewGame();
   cpuEnabled = true;
-  // If Player 2 is the default name, change to Deep Fish :)
-  if (players[1].name === 'Player 2') {
-    players[1].name = 'Deep Fish';
-    setScoreBoard()
-  } 
+  // If a new 1 player game is chosen, change Player 2's name to Deep Fish :)
+  players[1].name = 'Deep Fish';
+  // Reset the score when a different game type is chosen
+  resetScores();
   newGameButtonEvent();
   cpuPlayerInitialize();
 }
@@ -334,6 +333,7 @@ const versusCPU = () => {
 const twoPlayerGame = () => {
   clearForNewGame();
   cpuEnabled = false;
+  resetScores();
   newGameButtonEvent();
 }
 
@@ -342,6 +342,13 @@ const resetGame = () => {
   newGameButtonEvent();
 }
 
+function resetScores() {
+  players[0].wins = 0;
+  players[0].losses = 0;
+  players[1].wins = 0;
+  players[1].losses = 0;
+  setScoreBoard();
+}
 const onePlayerGameButton = document.getElementById('onePlayerGameButton');
 onePlayerGameButton.addEventListener('click', versusCPU);
 
