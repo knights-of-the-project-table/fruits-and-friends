@@ -273,9 +273,7 @@ const savedGameEvent = () => {
   gameBoardObj = restoreGameBoard();
   availableMoves = restoreAvailableMoves();
   currentPlayer = restoreCurrentPlayer();
-  playersObject = restorePlayers();
   cpuEnabled = restoreOnePlayerOrTwo();
-  players = playersObject.players;
   gameBoard = gameBoardObj.board;
   linearGameBoard = gameBoardObj.linearBoard;
   currentPlayerName = players[currentPlayer-1].name;
@@ -301,7 +299,6 @@ const savedGameEvent = () => {
       token.className = 'tokenLayer';
       gameBoard[row][column].button.appendChild(token);
     }
-
   });
   
   // If the CPU is enabled and was calculating it's move when the browser closed or was refreshed, it needs to perform its move, otherwise continue the game as usual
@@ -336,7 +333,6 @@ const versusCPU = () => {
 const twoPlayerGame = () => {
   clearForNewGame();
   cpuEnabled = false;
-  // resetPlayers();
   newGameButtonEvent();
 }
 
@@ -356,6 +352,7 @@ resetButton.addEventListener('click', resetGame);
 
 // This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
 function onPageLoad() {
+  renderPlayerInfo();
   if (restoreCurrentPlayer()) {
     savedGameFile = true;
   }
@@ -365,8 +362,6 @@ function onPageLoad() {
   } else {
     renderDefaultBoard();
   }
-
-  setScoreBoard();
 }
 
 function renderDefaultBoard() {
@@ -380,6 +375,15 @@ function renderDefaultBoard() {
     gameTile.appendChild(image);
     gameStatus.innerText = 'Choose a game type to begin!'
   });
+}
+
+function renderPlayerInfo() {
+  // If there's player info in local storage, call the restorePlayers function
+  if (localStorage.getItem('savedPlayersState')) {
+    playersObject = restorePlayers();
+    players = playersObject.players;
+  }
+  setScoreBoard();
 }
 
 onPageLoad();
