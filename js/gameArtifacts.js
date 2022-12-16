@@ -166,7 +166,7 @@ function savePlayers(players){
 
 // Clears local saved data for players (wins/losses/assigned token)
 function resetPlayers(){
-  localStorage.clear('savedPlayersState');
+  localStorage.removeItem('savedPlayersState');
 }
 
 // Saves the array of available moves to local storage
@@ -201,8 +201,8 @@ function restoreOnePlayerOrTwo(){
 }
 
 function clearForNewGame(){
-  localStorage.clear('savedAvailableMoves');
-  localStorage.clear('savedCurrentPlayer');
-  localStorage.clear('savedGameBoardState');
-  localStorage.clear('cpuEnabledFlag');
+  localStorage.removeItem('savedAvailableMoves');
+  localStorage.removeItem('savedCurrentPlayer');
+  localStorage.removeItem('savedGameBoardState');
+  localStorage.removeItem('cpuEnabledFlag');
 }

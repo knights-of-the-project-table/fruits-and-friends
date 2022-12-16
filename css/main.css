@@ -408,6 +408,11 @@ input[type=text] {
   margin-right: 0.5rem
 }
 
+.playerScore h2 {
+  margin-left: 2rem;
+  margin-right: 2rem
+}
+
 #gameStatus {
   font-family: Luckiest Guy;
   color: #d88c9a;
