@@ -103,11 +103,13 @@ h2 {
 }
 
 .bio2 {
+  font-size: 20px;
+  line-height: 25px;
   display: flex;
   flex-direction: column;
   margin: 1rem;
   border: 3px solid #F1E3D3;
-  padding: 1rem;
+  padding: 1.5rem;
   justify-content: center;
   background-color: #99C1B9;
   box-shadow: 5px 5px 2px -2px #6f7876;
