@@ -161,12 +161,13 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
 
     // Loop through valid moves for hypothetical board state
     for (let i = 0; i < diveAvailableMoves.length; i++){
-        let cpuMoveBoard =  new AIBoard(board.linearBoard);     // 
+        let cpuMoveBoard =  new AIBoard(board.linearBoard);     // Make copy of current board
         let move = diveAvailableMoves[i];
-        // console.log(move);
+
         if (cpuMoveBoard.linearBoard[move].occupiedBy){
-            console.log(cpuMoveBoard.linearBoard[move].occupiedBy);
+            console.log(`Game board logic polluted`);
         }
+
         cpuMoveBoard.linearBoard[move].occupiedBy = divePlayer;
         let fruit = cpuMoveBoard.linearBoard[move].fruit;
         let friend = cpuMoveBoard.linearBoard[move].friend;
@@ -174,9 +175,9 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
         let branchAvailableMoves = [];
         branchAvailableMoves = deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend);
         let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
-        // console.log(branchAvailableMoves);
-        // console.log(divePlayer);
 
+        // if computer player, returns the highest value
+        // if simulated human, returns the lowest value
         if (divePlayer === 2 && bestMoveScore < moveScore){           
             bestMoveScore = moveScore;
             testMove = diveAvailableMoves[i];
@@ -193,18 +194,13 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
             // }
         }
 
-        // if (depthShift === 0){
-        //     console.log(moveScore);
-        // }
-
         // console.log(bestMoveScore);
 
         // if (bestMoveScore === ((100 + depthShift) * playerCoefficient)){
         //     return bestMoveScore;
         // }   
 
-        // if computer player, returns the highest value
-        // if simulated human, returns the lowest value
+
 
     }
 
@@ -220,18 +216,15 @@ function cpuPlayerMoveGenerator(){
     
     let row = null;
     let column = null;
-    let bestMoveScore = -1000;  // To approximate -infinity flag for alpha-beta method
+    let bestMoveScore = -1000;  // To approximate -infinity flag for minimax
     let bestMoveIndex = 0;      // Index of move with highest value
-
-    // console.log(linearGameBoard);
 
     //  Loop through all current valid moves and finds the move with the best possible outcome
     for (let i = 0; i < availableMoves.length; i++){
         let moveScore = 0;
         let moveCoords = availableMoves[i];
-        let move = moveCoords[0] * 4 + moveCoords[1];
+        let move = moveCoords[0] * 4 + moveCoords[1];       // Converts grid [row][col] layout into [index]
         let boardSeed = new AIBoard(linearGameBoard);       // Makes a copy of the current board for simulated moves
-
 
 
         // Makes simulated move
@@ -239,11 +232,6 @@ function cpuPlayerMoveGenerator(){
         let fruit = boardSeed.linearBoard[move].fruit;
         let friend = boardSeed.linearBoard[move].friend;
         let diveAvailableMoves = deepDiveAvailableMoves(boardSeed.linearBoard, fruit, friend);
-
-        // console.log(moveCoords);
-        // console.log(move);
-        // console.log(linearGameBoard);
-        // console.log(boardSeed.linearBoard);
 
         // Calls on deepDive() to return a score for that particular move branch
         // Function does depth-first search out of all possible moves up to 'cpuDifficulty' layers
@@ -256,9 +244,9 @@ function cpuPlayerMoveGenerator(){
         }        
 
         // If unavoidable win is detected, stop search and take that path
-        // if (bestMoveScore === 100){
-        //     break;
-        // }
+        if (bestMoveScore === 100){
+            break;
+        }
     }
 
 
@@ -286,6 +274,7 @@ function cpuPlayerInitialize(){
     } else {
         cpuDifficulty = winLossDifference + 1;
     }
+
     console.log(cpuDifficulty);
 }
 
