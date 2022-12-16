@@ -7,105 +7,6 @@ const BOARD_WIDTH = 4;
 const BOARD_HEIGHT = 4;
 const BOARD_AREA = BOARD_WIDTH * BOARD_HEIGHT;
 
-// Generates and returns a new GameBoard object
-function newGameBoard(){
-  return new GameBoard;
-}
-
-// Restores, instantiates, and returns a GameBoard object from local storage
-function restoreGameBoard(){
-  let storedGameBoard = JSON.parse(localStorage.getItem('savedGameBoardState'));
-  let instantiatedGameBoard = new GameBoard;
-  let boardVersion = instantiatedGameBoard.board;
-
-  for (let i = 0; i < storedGameBoard.length; i++){
-    for (let j = 0; j < storedGameBoard.length; j++){
-      let fruit = storedGameBoard[i][j].fruit;
-      let friend = storedGameBoard[i][j].friend;
-      let imageSrc = storedGameBoard[i][j].imageSrc;
-      let occupiedBy = storedGameBoard[i][j].occupiedBy;
-
-      boardVersion[i][j] = new GameboardTile(fruit, friend, imageSrc, occupiedBy);
-    }
-  }
-  return instantiatedGameBoard;
-}
-
-// Takes in a game board (2D) and saves it in local storage
-function saveGameBoard(board){
-  localStorage.setItem('savedGameBoardState', JSON.stringify(board));
-}
-
-// Creates and returns a Players object which contains PlayerData
-function newPlayers(){
-  return new Players;
-}
-
-// Restores, instantiates, and returns a Players object from local storage
-function restorePlayers(){
-  let storedPlayers = JSON.parse(localStorage.getItem('savedPlayersState'));
-  let instantiatedPlayers = new Players();
-
-  for (let i = 0; i < storedPlayers.length; i++){
-    let playerData = storedPlayers[i];
-    let wins = playerData.wins;
-    let losses = playerData.losses;
-    let playerToken = playerData.playerToken;
-    let instancedPlayerData = new PlayerData(wins, losses, playerToken);
-    instantiatedPlayers.players[i] = instancedPlayerData;
-  }
-
-  return instantiatedPlayers;
-}
-
-// Takes in a players array and stores it in local storage
-function savePlayers(players){
-  localStorage.setItem('savedPlayersState', JSON.stringify(players));
-}
-
-// Clears local saved data for players (wins/losses/assigned token)
-function resetPlayers(){
-  localStorage.clear('savedPlayersState');
-}
-
-// Saves the array of available moves to local storage
-function saveAvailableMoves(availableMoves){
-  localStorage.setItem('savedAvailableMoves', JSON.stringify(availableMoves));
-}
-
-// Returns the array of available moves saved in local storage
-function restoreAvailableMoves(){
-  let storedAvailableMoves = JSON.parse(localStorage.getItem('savedAvailableMoves'));
-  return storedAvailableMoves;
-}
-
-// Saves the current player to local storage
-function saveCurrentPlayer(currentPlayer){
-  localStorage.setItem('savedCurrentPlayer', JSON.stringify(currentPlayer));
-}
-
-// Returns the current player saved in local storage
-function restoreCurrentPlayer(){
-  let storedCurrentPlayer = JSON.parse(localStorage.getItem('savedCurrentPlayer'));
-  return storedCurrentPlayer;
-}
-
-function saveOnePlayerOrTwo(cpuEnabled){
-  localStorage.setItem('cpuEnabledFlag', JSON.stringify(cpuEnabled));
-}
-
-function restoreOnePlayerOrTwo(){
-  let storedCPUParams = Boolean(JSON.parse(localStorage.getItem('cpuEnabledFlag')));
-  return storedCPUParams;
-}
-
-function clearForNewGame(){
-  localStorage.clear('savedAvailableMoves');
-  localStorage.clear('savedCurrentPlayer');
-  localStorage.clear('savedGameBoardState');
-  localStorage.clear('cpuEnabledFlag');
-}
-
 class GameBoard{
   constructor(){
     this.board = [];
@@ -163,9 +64,8 @@ class GameboardTile{
 class Players{
   constructor(playerToken1 = null, playerToken2 = null){
     this.players = [];
-
-    this.players.push(new PlayerData);
-    this.players.push(new PlayerData);
+    this.players.push(new PlayerData('Player 1'));
+    this.players.push(new PlayerData('Player 2'));
     if (playerToken1) {
       this.players[0].playerToken = playerToken1;
     } else {
@@ -180,7 +80,8 @@ class Players{
 }
 
 class PlayerData{
-  constructor(wins = 0, losses = 0, playerToken = null){
+  constructor(name = '', wins = 0, losses = 0, playerToken = null){
+    this.name = name;
     this.wins = wins;
     this.losses = losses;
     this.playerToken = playerToken;
@@ -206,6 +107,102 @@ const gameBoardTiles = [
   new GameboardTile('watermelon', 'turtle', './img/assets/tiles/watermelon-turtle.jpg'),
 ];
 
-// **************************
-// **** For Testing Only*****
-// **************************
+// Generates and returns a new GameBoard object
+function newGameBoard(){
+  return new GameBoard;
+}
+
+// Restores, instantiates, and returns a GameBoard object from local storage
+function restoreGameBoard(){
+  let storedGameBoard = JSON.parse(localStorage.getItem('savedGameBoardState'));
+  let instantiatedGameBoard = new GameBoard;
+  let boardVersion = instantiatedGameBoard.board;
+
+  for (let i = 0; i < storedGameBoard.length; i++){
+    for (let j = 0; j < storedGameBoard.length; j++){
+      let fruit = storedGameBoard[i][j].fruit;
+      let friend = storedGameBoard[i][j].friend;
+      let imageSrc = storedGameBoard[i][j].imageSrc;
+      let occupiedBy = storedGameBoard[i][j].occupiedBy;
+
+      boardVersion[i][j] = new GameboardTile(fruit, friend, imageSrc, occupiedBy);
+    }
+  }
+  return instantiatedGameBoard;
+}
+
+// Takes in a game board (2D) and saves it in local storage
+function saveGameBoard(board){
+  localStorage.setItem('savedGameBoardState', JSON.stringify(board));
+}
+
+// Creates and returns a Players object which contains PlayerData
+function newPlayers(){
+  return new Players;
+}
+
+// Restores, instantiates, and returns a Players object from local storage
+function restorePlayers(){
+  let storedPlayers = JSON.parse(localStorage.getItem('savedPlayersState'));
+  let instantiatedPlayers = new Players();
+
+  for (let i = 0; i < storedPlayers.length; i++){
+    let playerData = storedPlayers[i];
+    let name = playerData.name;
+    let wins = playerData.wins;
+    let losses = playerData.losses;
+    let playerToken = playerData.playerToken;
+    let instancedPlayerData = new PlayerData(name, wins, losses, playerToken);
+    instantiatedPlayers.players[i] = instancedPlayerData;
+  }
+
+  return instantiatedPlayers;
+}
+
+// Takes in a players array and stores it in local storage
+function savePlayers(players){
+  localStorage.setItem('savedPlayersState', JSON.stringify(players));
+}
+
+// Clears local saved data for players (wins/losses/assigned token)
+function resetPlayers(){
+  localStorage.clear('savedPlayersState');
+}
+
+// Saves the array of available moves to local storage
+function saveAvailableMoves(availableMoves){
+  localStorage.setItem('savedAvailableMoves', JSON.stringify(availableMoves));
+}
+
+// Returns the array of available moves saved in local storage
+function restoreAvailableMoves(){
+  let storedAvailableMoves = JSON.parse(localStorage.getItem('savedAvailableMoves'));
+  return storedAvailableMoves;
+}
+
+// Saves the current player to local storage
+function saveCurrentPlayer(currentPlayer){
+  localStorage.setItem('savedCurrentPlayer', JSON.stringify(currentPlayer));
+}
+
+// Returns the current player saved in local storage
+function restoreCurrentPlayer(){
+  let storedCurrentPlayer = JSON.parse(localStorage.getItem('savedCurrentPlayer'));
+  return storedCurrentPlayer;
+}
+
+function saveOnePlayerOrTwo(cpuEnabled){
+  localStorage.setItem('cpuEnabledFlag', JSON.stringify(cpuEnabled));
+}
+
+function restoreOnePlayerOrTwo(){
+  let storedCPUParams = Boolean(JSON.parse(localStorage.getItem('cpuEnabledFlag')));
+  return storedCPUParams;
+}
+
+function clearForNewGame(){
+  localStorage.clear('savedAvailableMoves');
+  localStorage.clear('savedCurrentPlayer');
+  localStorage.clear('savedGameBoardState');
+  localStorage.clear('cpuEnabledFlag');
+}
