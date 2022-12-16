@@ -354,6 +354,11 @@ resetButton.addEventListener('click', resetGame);
 // This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
 function onPageLoad() {
   renderPlayerInfo();
+  
+  if (restoreCurrentPlayer()) {
+    savedGameFile = true;
+  }
+
   if (savedGameFile){
     savedGameEvent();
   } else {
