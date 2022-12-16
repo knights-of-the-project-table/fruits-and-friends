@@ -69,6 +69,6 @@ function logUserName2(event) {
   let form = event.target;
   playerTwo = form.nameText2.value;
   submittedName2.innerText = playerTwo;
-  form.nameText.value = '';
+  form.nameText2.value = '';
 }
 
