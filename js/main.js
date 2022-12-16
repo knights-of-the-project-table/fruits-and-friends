@@ -43,23 +43,22 @@ sidebarButton.addEventListener('click', function () {
 
 // Username //
 
-let playerOne = 'Player 1';
-let submittedName = document.getElementById('submittedName');
-
 let userName = document.getElementById('userName1');
 userName.addEventListener('submit', logUserName);
 
 function logUserName(event) {
   event.preventDefault();
   let form = event.target;
-  playerOne = form.nameText.value;
-  submittedName.innerText = playerOne;
-  document.getElementById('gameStatus').innerText = `${playerOne}'s Turn`;
+  let playerOneName = form.nameText.value;
+  players[0].name = playerOneName;
+  // Only update the player status if a game has begun, i.e., if there is saved game data
+  if (savedGameFile) {
+    setCurrentPlayerStatus();
+  }
+  setScoreBoard();
   form.nameText.value = '';
+  savePlayers(players);
 }
-
-let playerTwo = 'Player 2';
-let submittedName2 = document.getElementById('submittedName2');
 
 let userName2 = document.getElementById('userName2');
 userName2.addEventListener('submit', logUserName2);
@@ -67,8 +66,14 @@ userName2.addEventListener('submit', logUserName2);
 function logUserName2(event) {
   event.preventDefault();
   let form = event.target;
-  playerTwo = form.nameText2.value;
-  submittedName2.innerText = playerTwo;
+  let playerTwoName = form.nameText2.value;
+  players[1].name = playerTwoName;
+  // Only update the player status if a game has begun, i.e., if there is saved game data
+  if (savedGameFile) {
+    setCurrentPlayerStatus();
+  }
+  setScoreBoard();
   form.nameText2.value = '';
+  savePlayers(players);
 }
 

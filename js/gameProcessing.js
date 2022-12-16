@@ -59,6 +59,7 @@ let linearGameBoard = gameBoardObj.linearBoard;
 // Sets up players
 let playersObject = newPlayers();
 let players = playersObject.players;
+let currentPlayerName = players[currentPlayer - 1].name;
 
 // Starts the game by initializing current available moves
 function gameStart(){
@@ -67,6 +68,8 @@ function gameStart(){
   }
   setCurrentPlayerStatus();
   enableAvailableTiles();
+  currentPlayerName = players[currentPlayer-1].name;
+  setCurrentPlayerStatus(currentPlayerName);
 }
 
 // Populates the array of allowed moves for game start, i.e., only the outer border of tiles are valid placements for a token
@@ -113,15 +116,17 @@ function makeMove(row, column) {
       if (currentPlayer === 1){
         gameStatus.innerText = `You beat level ${cpuDifficulty}! Leveling up!`;
       }else if (currentPlayer === 2){
-        gameStatus.innerText = `Deep Fish level ${cpuDifficulty} wins this round!`;
+        gameStatus.innerText = `${currentPlayerName} level ${cpuDifficulty} wins this round!`;
       }
 
     }else {
-    gameStatus.innerText = `Player ${currentPlayer} Won!`;
+    gameStatus.innerText = `${currentPlayerName} Won!`;
     }
+
     players[currentPlayer-1].wins++;
     players[currentPlayer%2].losses++;
     savePlayers(players);
+    setScoreBoard()
     disableTiles();
     clearForNewGame();
     return;
@@ -190,13 +195,21 @@ function disableTiles() {
   });
 }
 
+function setScoreBoard() {
+  const player1 = players[0];
+  const player2 = players[1];
+  const playerOneScoreBoardName = document.getElementById('playerOneScoreBoardName');
+  playerOneScoreBoardName.innerText = player1.name;
+  const playerTwoScoreBoardName = document.getElementById('playerTwoScoreBoardName');
+  playerTwoScoreBoardName.innerText = player2.name;
+  const playerOneScore = document.getElementById('playerOneScore');
+  playerOneScore.innerText = player1.wins;
+  const playerTwoScore = document.getElementById('playerTwoScore');
+  playerTwoScore.innerText = player2.wins;
+}
+
 function setCurrentPlayerStatus() {
-  let currentPlayerName = '';
-  if (currentPlayer === 1) {
-    currentPlayerName = playerOne;
-  } else {
-    currentPlayerName = playerTwo;
-  }
+  currentPlayerName = players[currentPlayer - 1].name;
   gameStatus.innerText = `${currentPlayerName}'s Turn`;
 }
 
@@ -247,7 +260,6 @@ const newGameButtonEvent = () => {
     gameTile.appendChild(image);
     gameTile.addEventListener('click', makeMoveEvent);
   });
-
   gameStart();
   saveGameBoard(gameBoard);
   savePlayers(players);
@@ -264,9 +276,10 @@ const savedGameEvent = () => {
   playersObject = restorePlayers();
   cpuEnabled = restoreOnePlayerOrTwo();
   players = playersObject.players;
-
   gameBoard = gameBoardObj.board;
   linearGameBoard = gameBoardObj.linearBoard;
+  currentPlayerName = players[currentPlayer-1].name;
+  setCurrentPlayerStatus(currentPlayerName);
 
   // Add each gameTile html element to the game board and create Event Handler
   gameTiles.forEach((gameTile, i) => {
@@ -310,7 +323,12 @@ function removeAllChildNodes(parent) {
 
 const versusCPU = () => {
   clearForNewGame();
-  cpuEnabled = true; 
+  cpuEnabled = true;
+  // If Player 2 is the default name, change to Deep Fish :)
+  if (players[1].name === 'Player 2') {
+    players[1].name = 'Deep Fish';
+    setScoreBoard()
+  } 
   newGameButtonEvent();
   cpuPlayerInitialize();
 }
@@ -318,7 +336,7 @@ const versusCPU = () => {
 const twoPlayerGame = () => {
   clearForNewGame();
   cpuEnabled = false;
-  resetPlayers();
+  // resetPlayers();
   newGameButtonEvent();
 }
 
@@ -347,6 +365,8 @@ function onPageLoad() {
   } else {
     renderDefaultBoard();
   }
+
+  setScoreBoard();
 }
 
 function renderDefaultBoard() {
