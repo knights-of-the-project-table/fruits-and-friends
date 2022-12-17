@@ -145,6 +145,11 @@ function savedGameEvent() {
     }
   });
 
+  // If the CPU is enabled, set the difficulty
+  if (cpuEnabled) {
+    cpuPlayerInitialize();
+  }
+
   // If the CPU is enabled and was calculating it's move when the browser closed or was refreshed, it needs to perform its move, otherwise continue the game as usual
   if (cpuEnabled && currentPlayer === 2) {
     disableTiles()
@@ -351,7 +356,7 @@ function twoPlayerGame() {
   }
   cpuEnabled = false;
   // If Player 2 name is Deep Fish, change to Player 2
-  if (players[1].name = 'Deep Fish') {
+  if (players[1].name === 'Deep Fish') {
     players[1].name = 'Player 2';
   }
   setScoreBoard();
