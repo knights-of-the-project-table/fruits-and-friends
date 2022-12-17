@@ -1,0 +1,529 @@
+/* Table of Content
+==================================================
+	- Google fonts & font family -
+	- Typography -
+  - Color Palette -
+  - Splash Screen -
+  - General -
+  - Header -
+  - Side Bar -
+  - Player Name Form -
+  - Game Board -
+*/
+
+/* Google fonts & font family
+==================================================*/
+
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap');
+
+/*
+Headings/Titles/Game text
+font-family: 'Luckiest Guy', cursive;
+
+Rules/biographical text/normal text
+font-family: 'Roboto', sans-serif;
+*/
+
+/* Typography
+==================================================*/
+
+html {
+  font-size: 16px;
+}
+
+/* Color Palette;
+==================================================*/
+
+/* Source: https://coolors.co/palette/d88c9a-f2d0a9-f1e3d3-99c1b9-8e7dbe
+
+#D88C9A;
+#F2D0A9;
+#F1E3D3;
+#99C1B9;
+#8E7DBE;
+
+*/
+
+/* Splash Screen  
+=================================================*/
+
+.intro {
+  position: fixed;
+  z-index: 5;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: #99C1B9;
+  transition: 2s;
+}
+
+.logo-header {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #D88C9A;
+  font-size: 100px;
+}
+
+#logo-header-fruits {
+  position: relative;
+  height: 700px;
+}
+
+#logo-header-friends {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  height: 700px;
+}
+
+#logo-header-icons {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  left: 0;
+  height: 700px;
+}
+
+.logo {
+  bottom: -20%;
+  opacity: 0;
+}
+
+.logo.active {
+  opacity: 1;
+  transition: ease-in-out 0.5s;
+}
+
+.logo.fade {
+  opacity: 0;
+  transition: ease-in-out 0.5s;
+}
+
+/* General;
+==================================================*/
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #8E7DBE;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  width: 100%;
+}
+
+h1 {
+  text-align: center;
+  font-size: 5rem;
+  margin-top: 3rem;
+  font-family: Luckiest Guy;
+  color: #F2D0A9;
+  -webkit-text-stroke: 2px rgb(70, 70, 70);
+}
+
+h2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+h3 {
+  font-family: Luckiest Guy;
+  margin-top: 1rem;
+  font-size: 2rem;
+  text-align: center;
+  color: #e0a3ae;
+  -webkit-text-stroke: 2px black;
+}
+
+li {
+  display: inline;
+  float: left;
+}
+
+a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: rgb(70, 70, 70);
+  margin-left: 2rem;
+  margin-right: 2rem;
+}
+
+li a:hover {
+  background-color: #F2D0A9;
+  border-radius: 10%;
+}
+
+button {
+  box-shadow: 0 5px 0 0 #6f7876;
+  cursor: pointer;
+}
+
+button:enabled:active {
+  transform: translateY(4px);
+}
+
+button:disabled {
+  cursor: auto;
+}
+
+/* Header;
+==================================================*/
+
+header {
+  position: relative;
+  background-color: #D88C9A;
+  width: 100%;
+}
+
+#header1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#headerLogo {
+  display: flex;
+  flex-direction: row;
+  margin: 2rem;
+  justify-content: space-between;
+}
+
+#headerLogoKangaroo {
+  height: 140px;
+  width: 140px;
+  transform: rotate(deg);
+  position: relative;
+  top: -5%;
+  left: 20%;
+}
+
+#headerLogoWatermelon {
+  height: 90px;
+  width: 90px;
+  transform: rotate(-35deg);
+  position: relative;
+  top: 30%;
+  left: -10%;
+}
+
+#headerLogoStrawberry {
+  height: 80px;
+  width: 80px;
+  transform: rotate(20deg);
+  position: relative;
+  top: 25%;
+  right: -15%;
+}
+
+#headerLogoDragon {
+  height: 130px;
+  width: 130px;
+  transform: rotate(deg);
+  position: relative;
+  top: -5%;
+  right: 5%;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+  background-color: #F1E3D3;
+  box-shadow: 5px 5px 2px -2px #927d66;
+}
+
+/* Side Bar;
+==================================================*/
+.sidebarButton {
+  font-size: 15px;
+  font-weight: 600;
+  z-index: 2;
+  text-align: center;
+  background-color: #99c1b9;
+  color: #273230;
+  height: 35px;
+  width: 45px;
+  padding: 7px;
+  margin-left: 450px;
+  border: 1px solid rgb(0, 0, 0);
+  border-left: none;
+  border-radius: 0px 10px 10px 0px;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.18);
+  transition: 0.5s;
+  position: fixed;
+  left: 0;
+  top: 30%;
+  cursor: pointer;
+}
+
+
+.sidebarContent {
+  z-index: 2;
+  width: 450px;
+  background-color: #99c1b9;
+  transition: 0.5s;
+  padding-top: 20px;
+  border-radius: 0px 10px 10px 0px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.sidebar .buttonToggle {
+  transform: translatex(-450px);
+  display: initial;
+}
+
+#scroll {
+  font-size: 23px;
+  color: #273230;
+  line-height: 35px;
+  padding: 1rem;
+  height: 93%;
+  overflow-y: scroll;
+}
+
+#scroll p {
+  margin-top: 1rem;
+}
+
+#indent p {
+  text-indent: 35px;
+}
+
+h4 {
+  font-family: Luckiest Guy;
+  font-size: 40px;
+  text-align: center;
+  color: #e0a3ae;
+  -webkit-text-stroke: 2px black;
+}
+
+h5 {
+  font-weight: bold;
+  color: #273230;
+  text-align: left;
+  font-size: 25px;
+  margin-top: 1rem;
+}
+  
+ol li {
+  list-style-type: decimal;
+  margin: 0.5rem;
+}
+
+.rulesIMG {
+  width: 370px;
+  height: 370px;
+  margin-top: 1rem;
+}
+
+.sidebarButton:hover {
+  background-color: #7eb6a8;
+}
+
+/* Player Name Form 
+==================================================*/
+
+input {
+  background-color: #8E7DBE;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1.25rem;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  border-radius: 10px;
+}
+
+input[type=text] {
+  padding: 5px;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  opacity: 0.5;
+  /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: white;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: white;
+}
+
+/* Game Board;
+==================================================*/
+
+#gameOptions {
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  align-items: center;
+}
+
+.gameOptionButtons {
+  font-family: Luckiest Guy;
+  font-size: 25px;
+  margin: 1rem;
+  padding: 28px;
+  width: 250px;
+  height: 100px;
+  border-radius: 10px;
+  background-color: #99c1b9;
+  color: #e0a3ae;
+  -webkit-text-stroke: 2px black;
+
+}
+
+.gameOptionButtons:hover {
+  background-color: #7eb6a8;
+  color: #dc8b9a;
+}
+
+#scoreBoard {
+  font-family: Luckiest Guy;
+  color: #99c1b9;
+  -webkit-text-stroke: 2px black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+  font-size: 40px;
+}
+
+.playerScore {
+  display: flex;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem
+}
+
+.playerScore h2 {
+  margin-left: 2rem;
+  margin-right: 2rem
+}
+
+#playerOneScore, #playerTwoScore, #playerScoreDelimiter {
+  color: #d88c9a;
+}
+
+#gameStatus {
+  font-family: Luckiest Guy;
+  color: #d88c9a;
+  -webkit-text-stroke: 2px black;
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 40px;
+}
+
+#grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+#board {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-wrap: wrap;
+  margin: 1rem;
+}
+
+.playerAvatar {
+  margin: 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+@media only screen and (max-width: 1510px) {
+  #board {
+    max-width: 744px;
+  }
+
+  #board> :nth-child(1) {
+    order: 2;
+  }
+
+  #board> :nth-child(2) {
+    order: 1;
+  }
+
+  #board> :nth-child(3) {
+    order: 3;
+  }
+}
+
+#playerOneAvatarImg {
+  width: 150px;
+}
+
+#playerTwoAvatarImg {
+  width: 150px;
+}
+
+#newGameButtonContainer {
+  display: flex;
+  justify-content: center;
+}
+
+#newGameButton {
+  font-family: Luckiest Guy;
+  font-size: 25px;
+  background-color: #99c1b9;
+  color: #e0a3ae;
+  -webkit-text-stroke: 2px black;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 1rem;
+}
+
+#newGameButton:hover {
+  background-color: #7eb6a8;
+  color: #dc8b9a;
+}
+
+.gameTile {
+  position: relative;
+  border: 0.5rem solid #99c1b9;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0.25rem;
+  box-shadow: 5px 5px 2px -2px #6f7876;
+}
+
+.gameTile:enabled {
+  border-color: #dc8b9a;
+}
+
+.tileLayer {
+  position: relative;
+  width: 150px;
+  display: block;
+}
+
+.tokenLayer {
+  position: absolute;
+  z-index: 1;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+}
