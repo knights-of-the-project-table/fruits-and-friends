@@ -413,6 +413,10 @@ input[type=text] {
   margin-right: 2rem
 }
 
+#playerOneScore, #playerTwoScore, #playerScoreDelimiter {
+  color: #d88c9a;
+}
+
 #gameStatus {
   font-family: Luckiest Guy;
   color: #d88c9a;
@@ -472,12 +476,12 @@ input[type=text] {
   width: 150px;
 }
 
-#resetButtonContainer {
+#newGameButtonContainer {
   display: flex;
   justify-content: center;
 }
 
-#resetButton {
+#newGameButton {
   font-family: Luckiest Guy;
   font-size: 25px;
   background-color: #99c1b9;
@@ -488,7 +492,7 @@ input[type=text] {
   margin: 1rem;
 }
 
-#resetButton:hover {
+#newGameButton:hover {
   background-color: #7eb6a8;
   color: #dc8b9a;
 }
