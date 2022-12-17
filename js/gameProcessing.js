@@ -266,6 +266,11 @@ const newGameButtonEvent = () => {
   saveAvailableMoves(availableMoves);
   saveCurrentPlayer(currentPlayer);
   saveOnePlayerOrTwo(cpuEnabled);
+
+  // If the CPU is enabled, make sure to update the difficulty based off of the wins/losses
+  if (cpuEnabled) {
+    cpuPlayerInitialize();
+  }
   savedGameFile = true; 
 }
 
@@ -321,23 +326,32 @@ function removeAllChildNodes(parent) {
 
 const versusCPU = () => {
   clearForNewGame();
+  if (!cpuEnabled) {
+    resetScores();
+  }
   cpuEnabled = true;
   // If a new 1 player game is chosen, change Player 2's name to Deep Fish :)
   players[1].name = 'Deep Fish';
   // Reset the score when a different game type is chosen
-  resetScores();
+  setScoreBoard();
   newGameButtonEvent();
-  cpuPlayerInitialize();
 }
 
 const twoPlayerGame = () => {
   clearForNewGame();
+  if (cpuEnabled) {
+    resetScores();
+  }
   cpuEnabled = false;
-  resetScores();
+  // If Player 2 name is Deep Fish, change to Player 2
+  if (players[1].name = 'Deep Fish') {
+    players[1].name = 'Player 2';
+  }
+  setScoreBoard();
   newGameButtonEvent();
 }
 
-const resetGame = () => {
+const newGame = () => {
   clearForNewGame();
   newGameButtonEvent();
 }
@@ -347,7 +361,6 @@ function resetScores() {
   players[0].losses = 0;
   players[1].wins = 0;
   players[1].losses = 0;
-  setScoreBoard();
 }
 const onePlayerGameButton = document.getElementById('onePlayerGameButton');
 onePlayerGameButton.addEventListener('click', versusCPU);
@@ -355,8 +368,8 @@ onePlayerGameButton.addEventListener('click', versusCPU);
 const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
 twoPlayerGameButton.addEventListener('click', twoPlayerGame);
 
-const resetButton = document.getElementById('resetButton');
-resetButton.addEventListener('click', resetGame);
+const newGameButton = document.getElementById('newGameButton');
+newGameButton.addEventListener('click', newGame);
 
 // This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
 function onPageLoad() {
