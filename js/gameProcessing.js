@@ -61,6 +61,112 @@ let playersObject = newPlayers();
 let players = playersObject.players;
 let currentPlayerName = players[currentPlayer - 1].name;
 
+// This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
+function onPageLoad() {
+  renderPlayerInfo();
+  
+  if (restoreCurrentPlayer()) {
+    savedGameFile = true;
+  }
+
+  if (savedGameFile){
+    savedGameEvent();
+  } else {
+    renderDefaultBoard();
+  }
+}
+
+function renderPlayerInfo() {
+  // If there's player info in local storage, call the restorePlayers function
+  if (localStorage.getItem('savedPlayersState')) {
+    playersObject = restorePlayers();
+    players = playersObject.players;
+  }
+  setScoreBoard();
+}
+
+function setScoreBoard() {
+  const player1 = players[0];
+  const player2 = players[1];
+  const playerOneScoreBoardName = document.getElementById('playerOneScoreBoardName');
+  playerOneScoreBoardName.innerText = player1.name;
+  const playerTwoScoreBoardName = document.getElementById('playerTwoScoreBoardName');
+  playerTwoScoreBoardName.innerText = player2.name;
+  const playerOneScore = document.getElementById('playerOneScore');
+  playerOneScore.innerText = player1.wins;
+  const playerTwoScore = document.getElementById('playerTwoScore');
+  playerTwoScore.innerText = player2.wins;
+}
+
+function renderDefaultBoard() {
+  // For each game tile button, load the corresponding tile from the ordered set of the gameBoardTiles array from gameArtifacts.js
+  gameTiles.forEach((gameTile, i) => {
+    // Before the game starts, each button is disabled
+    gameTile.disabled = true;
+    let image = document.createElement('img');
+    image.className = 'tileLayer';
+    image.src = gameBoardTiles[i].imageSrc;
+    gameTile.appendChild(image);
+    gameStatus.innerText = 'Choose a game type to begin!'
+  });
+}
+
+// This function loads all local storage data and populates the game board with it, then continues the game
+function savedGameEvent() {
+
+  gameBoardObj = restoreGameBoard();
+  availableMoves = restoreAvailableMoves();
+  currentPlayer = restoreCurrentPlayer();
+  cpuEnabled = restoreOnePlayerOrTwo();
+  gameBoard = gameBoardObj.board;
+  linearGameBoard = gameBoardObj.linearBoard;
+  currentPlayerName = players[currentPlayer-1].name;
+  setCurrentPlayerStatus();
+
+  // Add each gameTile html element to the game board and create Event Handler
+  gameTiles.forEach((gameTile, i) => {
+    const row = Math.floor(i / BOARD_WIDTH);
+    const column = i % BOARD_WIDTH;
+    gameBoard[row][column].button = gameTile;
+    // Make sure the current default or previous game tiles are removed
+    removeAllChildNodes(gameTile);
+    gameTile.id = i;
+    let image = document.createElement('img');
+    image.className = 'tileLayer';
+    image.src = gameBoard[row][column].imageSrc;
+    gameTile.appendChild(image);
+    gameTile.addEventListener('click', makeMoveEvent);
+
+    if (gameBoard[row][column].occupiedBy) {
+      let token = document.createElement('img');
+      token.src = players[gameBoard[row][column].occupiedBy - 1].playerToken;
+      token.className = 'tokenLayer';
+      gameBoard[row][column].button.appendChild(token);
+    }
+  });
+
+  // If the CPU is enabled and was calculating it's move when the browser closed or was refreshed, it needs to perform its move, otherwise continue the game as usual
+  if (cpuEnabled && currentPlayer === 2) {
+    disableTiles()
+    setCurrentPlayerStatus();
+    asyncCpuMove(4000);
+  } else {
+    gameStart();
+  }
+}
+
+function setCurrentPlayerStatus() {
+  currentPlayerName = players[currentPlayer - 1].name;
+  gameStatus.innerText = `${currentPlayerName}'s Turn`;
+}
+
+// This function removes all child nodes from an element
+function removeAllChildNodes(parent) {
+  while (parent.firstChild) {
+    parent.removeChild(parent.firstChild);
+  }
+}
+
 // Starts the game by initializing current available moves
 function gameStart(){
   if (availableMoves.length === 0) {
@@ -70,17 +176,6 @@ function gameStart(){
   enableAvailableTiles();
   currentPlayerName = players[currentPlayer-1].name;
   setCurrentPlayerStatus(currentPlayerName);
-}
-
-// Populates the array of allowed moves for game start, i.e., only the outer border of tiles are valid placements for a token
-function initializeMoves(){
-  for (let i = 0; i < BOARD_WIDTH; i++){
-    for (let j = 0; j < BOARD_WIDTH; j++){
-      if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
-        availableMoves.push([i, j]);
-      }
-    }
-  }
 }
 
 // Event Handler for clicking on a tile. This is made as an intermediate step because asyncCpuMove calls makeMove with row and column arguments
@@ -162,6 +257,7 @@ function updateAvailableMoves(fruit, friend){
 
 // Enables game tiles based upon the moves which will be available for the following turn
 function enableAvailableTiles(){
+  //First disable all tiles and then enable those that are valid
   disableTiles();
 
   for (let i = 0; i < availableMoves.length; i++){
@@ -169,6 +265,12 @@ function enableAvailableTiles(){
     let column = availableMoves[i][1];
     gameBoard[row][column].button.disabled = false;
   }
+}
+
+function disableTiles() {
+  gameTiles.forEach(gameTile => {
+    gameTile.disabled = true;
+  });
 }
 
 // Evaluate Win Conditions
@@ -189,30 +291,6 @@ function evaluateWin(){
   });
 }
 
-function disableTiles() {
-  gameTiles.forEach(gameTile => {
-    gameTile.disabled = true;
-  });
-}
-
-function setScoreBoard() {
-  const player1 = players[0];
-  const player2 = players[1];
-  const playerOneScoreBoardName = document.getElementById('playerOneScoreBoardName');
-  playerOneScoreBoardName.innerText = player1.name;
-  const playerTwoScoreBoardName = document.getElementById('playerTwoScoreBoardName');
-  playerTwoScoreBoardName.innerText = player2.name;
-  const playerOneScore = document.getElementById('playerOneScore');
-  playerOneScore.innerText = player1.wins;
-  const playerTwoScore = document.getElementById('playerTwoScore');
-  playerTwoScore.innerText = player2.wins;
-}
-
-function setCurrentPlayerStatus() {
-  currentPlayerName = players[currentPlayer - 1].name;
-  gameStatus.innerText = `${currentPlayerName}'s Turn`;
-}
-
 // This function awaits a timed-out promise that calculates the CPU's next move. This is done to give the player a sense of rhythm when the CPU moves, and to make sure that the player token is painted in the browser in the makeMove function before the CPU token is added to the board.
 async function asyncCpuMove(timeOutInterval) {
   const move = await resolveAfterTimeout(timeOutInterval);
@@ -231,17 +309,78 @@ function resolveAfterTimeout(timeOut) {
   });
 }
 
-// This function starts a new game 
-const newGameButtonEvent = () => {
-
-    availableMoves = [];
-    currentPlayer = 1;
-
-    for (let i = 0; i < gameBoardObj.linearBoard.length; i++) {
-      gameBoardObj.linearBoard[i].occupiedBy = null;
+// Populates the array of allowed moves for game start, i.e., only the outer border of tiles are valid placements for a token
+function initializeMoves(){
+  for (let i = 0; i < BOARD_WIDTH; i++){
+    for (let j = 0; j < BOARD_WIDTH; j++){
+      if (!(i * j === 1 || i * j === 2 || (i === 2 && j === 2))){
+        availableMoves.push([i, j]);
+      }
     }
+  }
+}
 
-    gameBoardObj = newGameBoard();
+//Event handlers for all buttons (1 player game, 2 player game, new game)
+const onePlayerGameButton = document.getElementById('onePlayerGameButton');
+onePlayerGameButton.addEventListener('click', versusCPU);
+
+const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
+twoPlayerGameButton.addEventListener('click', twoPlayerGame);
+
+const newGameButton = document.getElementById('newGameButton');
+newGameButton.addEventListener('click', newGame);
+
+function versusCPU() {
+  clearForNewGame();
+  // Reset the score when a different game type is chosen
+  if (!cpuEnabled) {
+    resetScores();
+  }
+  cpuEnabled = true;
+  // If a new 1 player game is chosen, change Player 2's name to Deep Fish :)
+  players[1].name = 'Deep Fish';
+  setScoreBoard();
+  newGameButtonEvent();
+}
+
+function twoPlayerGame() {
+  clearForNewGame();
+  // Reset the score when a different game type is chosen
+  if (cpuEnabled) {
+    resetScores();
+  }
+  cpuEnabled = false;
+  // If Player 2 name is Deep Fish, change to Player 2
+  if (players[1].name = 'Deep Fish') {
+    players[1].name = 'Player 2';
+  }
+  setScoreBoard();
+  newGameButtonEvent();
+}
+
+function newGame() {
+  clearForNewGame();
+  newGameButtonEvent();
+}
+
+function resetScores() {
+  players[0].wins = 0;
+  players[0].losses = 0;
+  players[1].wins = 0;
+  players[1].losses = 0;
+}
+
+// This function starts a new game 
+function newGameButtonEvent() {
+
+  availableMoves = [];
+  currentPlayer = 1;
+
+  for (let i = 0; i < gameBoardObj.linearBoard.length; i++) {
+    gameBoardObj.linearBoard[i].occupiedBy = null;
+  }
+
+  gameBoardObj = newGameBoard();
 
   gameBoard = gameBoardObj.board;
   linearGameBoard = gameBoardObj.linearBoard;
@@ -274,138 +413,5 @@ const newGameButtonEvent = () => {
   savedGameFile = true; 
 }
 
-const savedGameEvent = () => {
-
-  gameBoardObj = restoreGameBoard();
-  availableMoves = restoreAvailableMoves();
-  currentPlayer = restoreCurrentPlayer();
-  cpuEnabled = restoreOnePlayerOrTwo();
-  gameBoard = gameBoardObj.board;
-  linearGameBoard = gameBoardObj.linearBoard;
-  currentPlayerName = players[currentPlayer-1].name;
-  setCurrentPlayerStatus(currentPlayerName);
-
-  // Add each gameTile html element to the game board and create Event Handler
-  gameTiles.forEach((gameTile, i) => {
-    const row = Math.floor(i / BOARD_WIDTH);
-    const column = i % BOARD_WIDTH;
-    gameBoard[row][column].button = gameTile;
-    // Make sure the current default or previous game tiles are removed
-    removeAllChildNodes(gameTile);
-    gameTile.id = i;
-    let image = document.createElement('img');
-    image.className = 'tileLayer';
-    image.src = gameBoard[row][column].imageSrc;
-    gameTile.appendChild(image);
-    gameTile.addEventListener('click', makeMoveEvent);
-
-    if (gameBoard[row][column].occupiedBy) {
-      let token = document.createElement('img');
-      token.src = players[gameBoard[row][column].occupiedBy - 1].playerToken;
-      token.className = 'tokenLayer';
-      gameBoard[row][column].button.appendChild(token);
-    }
-  });
-  
-  // If the CPU is enabled and was calculating it's move when the browser closed or was refreshed, it needs to perform its move, otherwise continue the game as usual
-  if (cpuEnabled && currentPlayer === 2) {
-    disableTiles()
-    setCurrentPlayerStatus();
-    asyncCpuMove(4000);
-  } else {
-    gameStart();
-  }
-}
-
-// This function removes all child nodes from an element
-function removeAllChildNodes(parent) {
-  while (parent.firstChild) {
-    parent.removeChild(parent.firstChild);
-  }
-}
-
-const versusCPU = () => {
-  clearForNewGame();
-  if (!cpuEnabled) {
-    resetScores();
-  }
-  cpuEnabled = true;
-  // If a new 1 player game is chosen, change Player 2's name to Deep Fish :)
-  players[1].name = 'Deep Fish';
-  // Reset the score when a different game type is chosen
-  setScoreBoard();
-  newGameButtonEvent();
-}
-
-const twoPlayerGame = () => {
-  clearForNewGame();
-  if (cpuEnabled) {
-    resetScores();
-  }
-  cpuEnabled = false;
-  // If Player 2 name is Deep Fish, change to Player 2
-  if (players[1].name = 'Deep Fish') {
-    players[1].name = 'Player 2';
-  }
-  setScoreBoard();
-  newGameButtonEvent();
-}
-
-const newGame = () => {
-  clearForNewGame();
-  newGameButtonEvent();
-}
-
-function resetScores() {
-  players[0].wins = 0;
-  players[0].losses = 0;
-  players[1].wins = 0;
-  players[1].losses = 0;
-}
-const onePlayerGameButton = document.getElementById('onePlayerGameButton');
-onePlayerGameButton.addEventListener('click', versusCPU);
-
-const twoPlayerGameButton = document.getElementById('twoPlayerGameButton');
-twoPlayerGameButton.addEventListener('click', twoPlayerGame);
-
-const newGameButton = document.getElementById('newGameButton');
-newGameButton.addEventListener('click', newGame);
-
-// This is the page load function that populates a default board with ordered tiles and loads a game state if one exists
-function onPageLoad() {
-  renderPlayerInfo();
-  
-  if (restoreCurrentPlayer()) {
-    savedGameFile = true;
-  }
-
-  if (savedGameFile){
-    savedGameEvent();
-  } else {
-    renderDefaultBoard();
-  }
-}
-
-function renderDefaultBoard() {
-  // For each game tile button, load the corresponding tile from the ordered set of the gameBoardTiles array from gameArtifacts.js
-  gameTiles.forEach((gameTile, i) => {
-    // Before the game starts, each button is disabled
-    gameTile.disabled = true;
-    let image = document.createElement('img');
-    image.className = 'tileLayer';
-    image.src = gameBoardTiles[i].imageSrc;
-    gameTile.appendChild(image);
-    gameStatus.innerText = 'Choose a game type to begin!'
-  });
-}
-
-function renderPlayerInfo() {
-  // If there's player info in local storage, call the restorePlayers function
-  if (localStorage.getItem('savedPlayersState')) {
-    playersObject = restorePlayers();
-    players = playersObject.players;
-  }
-  setScoreBoard();
-}
-
+// Load event
 onPageLoad();
