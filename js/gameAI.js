@@ -1,15 +1,35 @@
 'use strict';
 
+// The AI shall, to reduce calculation time, use a linear board[16] instead of the 2D game artifacts board[4][4]
+// The linear board shall be composed of reduced memory game tiles
+// The AI shall use 1D arrays for win conditions to account of linear board[16]
+// The AI shall use the player's win - losses to determine difficulty
+// The AI shall use max tree depth to toggle difficulty
+// The AI shall recalulate difficulty upon each win/loss
+// The AI shall have difficulty limited to 1 to 12 inclusive
 
+// General flow:
+// Recurse
+// Check base case
+    // Player wins
+    // Max depth reached
+    // return base node score
+// Loop through each available move
+    // Copy board
+    // Make move
+    // Evaluate next available move set
+    // Recurse
+    // Keep copy of max/min score
+// Return score
 
-// The AI segment uses a scoring system with CPU wins with an assigned score flag of 100
-// Simulated human wins are assigned a score flag of -100
-
-// New win condition functions
-// Linear board
-// Available Moves
-// Values on Win/loss
-// Redo game tiles / board without extra information
+// Minimax scoring/logic rules
+// X(computer) shall take the highest scoring move
+// N(simulated human) shall take the lowest scoring move
+// If tie, pick first option in available move array
+// Base case at win/loss or max depth reached
+// Win = 100
+// Loss = -100
+// Max depth = border spaces worth 4 or -4, center worth 7 or -7
 
 const WIN_CONDITIONS_ARRAY = [
     // first row
@@ -52,8 +72,10 @@ const WIN_CONDITIONS_ARRAY = [
     [10, 11, 14, 15],
   ];
 
+// cpuDifficulty determines the depth of the search tree
 let cpuDifficulty = 12;
 
+// Reduced impact game board
 class AIBoard{
     constructor(gameLinearBoard){
         this.linearBoard = [];
@@ -72,6 +94,7 @@ class AIBoard{
     }
 }
 
+// Low impact game tiles
 class AITile{
     constructor(fruit, friend, occupiedBy){
         this.fruit = fruit;
@@ -80,26 +103,32 @@ class AITile{
     }
 }
 
-function deepDiveWin(board, diveAvailableMoves, divePlayer){
-
+// Purpose: To determine if a move has won the game through three win conditions
+//          1) 4 in a row, column, diagonal given by WIN_CONDITIONS_ARRAY
+//          2) Next player has no available moves
+// Input: AIboard object, array of available moves, current player (1 or 2)
+// Output: boolean
+function deepDiveWin(board, diveAvailableMoves, divePlayer) {
     if (diveAvailableMoves.length === 0) {
-      return true;
+        return true;
     }
     // Iterate through every win condition with the .some() method, which tests whether at least one element in the array passes the test of a callback function.
     return WIN_CONDITIONS_ARRAY.some(condition => {
-      // For every win condition, check to see if the current player occupies the necessary indices of the game board using .every() method
-      return condition.every(gameBoardPosition => {
-        return board.linearBoard[gameBoardPosition].occupiedBy === divePlayer;
-      });
+        // For every win condition, check to see if the current player occupies the necessary indices of the game board using .every() method
+        return condition.every(gameBoardPosition => {
+            return board.linearBoard[gameBoardPosition].occupiedBy === divePlayer;
+        });
     });
-  }
+}
 
+// Purpose: To return an array of all unoccupied moves that match the given fruit or friend
+// Input: AIboard object, fruit, friend
+// Output: Array of integers (0-15) indicating possible which moves the player can make
 function deepDiveAvailableMoves(board, fruit, friend){
     let newAvailableMoves = [];
 
     for (let i = 0; i < board.length; i++) {
             if (!board[i].occupiedBy && (board[i].fruit === fruit || board[i].friend === friend)) {
-                // console.log(i, j);
                 newAvailableMoves.push(i);
             }
     }
@@ -134,18 +163,24 @@ function deepDiveBoardScore(board){
 }
 
 // Core recursive depth-first function to search through moves immediately available at each level
-// Returns the best score for the CPU player based on max-min / Alpha-Beta methods for the initial node passed
+// Returns the best score for the CPU player based on minimax methods for the initial node passed
+// General flow of following function listed at the top of this file
 function deepDive(board, diveAvailableMoves, divePlayer, depth){
-    // If a win is detected for divePlayer, stop recursion and return win flag
-    let depthShift = depth - cpuDifficulty; 
 
+    // Shift for node scores for the CPU to favor shallow (quick) wins
+    // Shift also delays possible losses if a win isn't predicted
+    let depthShift = depth - cpuDifficulty;
+
+    // BASE CASE WIN
+    // If a win is detected for divePlayer, stop recursion and return win flag
     if (deepDiveWin(board, diveAvailableMoves, divePlayer)){
         let moveScore = (divePlayer * 2 - 3) * (100 + depthShift);
-        // console.log(moveScore);
         return (moveScore);
     }
+
     depth--;
 
+    // BASE CASE DEPTH
     // If max depth reached, return board value
     if (depth < 1){
         let moveScore = deepDiveBoardScore(board);
@@ -157,30 +192,31 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
     let playerCoefficient = (divePlayer * 2 - 3);       // Set to 1 for CPU (max-layer) and -1 for human (min-layer)
     let bestMoveScore = (-1000) * playerCoefficient;    // Set infinite flag (-1000 on max-layer and 1000 on min-layer)
 
-    let testMove = [];
-
-    // Loop through valid moves for hypothetical board state
+    // Loop through each available move
     for (let i = 0; i < diveAvailableMoves.length; i++){
         let cpuMoveBoard =  new AIBoard(board.linearBoard);     // Make copy of current board
         let move = diveAvailableMoves[i];
 
+        // Logic check
         if (cpuMoveBoard.linearBoard[move].occupiedBy){
             console.log(`Game board logic polluted`);
         }
 
+        // Make move
         cpuMoveBoard.linearBoard[move].occupiedBy = divePlayer;
         let fruit = cpuMoveBoard.linearBoard[move].fruit;
         let friend = cpuMoveBoard.linearBoard[move].friend;
 
         let branchAvailableMoves = [];
-        branchAvailableMoves = deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend);
-        let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);
+        branchAvailableMoves = deepDiveAvailableMoves(cpuMoveBoard.linearBoard, fruit, friend); // Evaluate next available move set
+        let moveScore = deepDive(cpuMoveBoard, branchAvailableMoves, divePlayer, depth);        // Recurse
 
+        // Keep copy of max/min score
         // if computer player, returns the highest value
         // if simulated human, returns the lowest value
         if (divePlayer === 2 && bestMoveScore < moveScore){           
             bestMoveScore = moveScore;
-            testMove = diveAvailableMoves[i];
+            // Enable for alpha-beta
             // if (bestMoveScore === (100 + depthShift)){
             //     return bestMoveScore;
             // }
@@ -188,14 +224,13 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
 
         if (divePlayer === 1 && bestMoveScore > moveScore){            
             bestMoveScore = moveScore;
-            testMove = diveAvailableMoves[i];
+            // Enable for alpha-beta
             // if (bestMoveScore === (100 - depthShift)){
             //     return bestMoveScore;
             // }
         }
 
-        // console.log(bestMoveScore);
-
+        // Enable for alpha-beta
         // if (bestMoveScore === ((100 + depthShift) * playerCoefficient)){
         //     return bestMoveScore;
         // }   
@@ -205,8 +240,6 @@ function deepDive(board, diveAvailableMoves, divePlayer, depth){
     }
 
     return (bestMoveScore);
-
-
 }
 
 // Seeds a recursive algorithm to determine the best possible move for a desired level of difficulty
@@ -225,7 +258,6 @@ function cpuPlayerMoveGenerator(){
         let moveCoords = availableMoves[i];
         let move = moveCoords[0] * 4 + moveCoords[1];       // Converts grid [row][col] layout into [index]
         let boardSeed = new AIBoard(linearGameBoard);       // Makes a copy of the current board for simulated moves
-
 
         // Makes simulated move
         boardSeed.linearBoard[move].occupiedBy = 2;
@@ -249,23 +281,22 @@ function cpuPlayerMoveGenerator(){
         }
     }
 
-
     row = availableMoves[bestMoveIndex][0] ;
     column = availableMoves[bestMoveIndex][1];
 
-    // console.log(`Possible move scores: ${moveScoreArray}`);
-    // console.log(`Current board: ${linearGameBoard}`);
-    // console.log(`Possible moves: ${availableMoves}`);
-    console.log(`Best move score: ${bestMoveScore}`);
+    console.log(`Best move score: ${bestMoveScore}`);   // How close you are to your doom!!!
     console.log(`Picked move: ${[row, column]}`);
 
     return([row, column])
 }
 
+// Initializes cpuDifficulty based on player wins/losses
 function cpuPlayerInitialize(){
     let wins = players[0].wins;
     let losses = players[0].losses;
     let winLossDifference = wins - losses;
+
+    console.log([wins, losses]);
 
     if (winLossDifference < 1){
         cpuDifficulty = 1;
@@ -277,6 +308,12 @@ function cpuPlayerInitialize(){
 
     console.log(cpuDifficulty);
 }
+
+
+// ********************************************************
+// **** Jeremy's Playground - For debugging purposes only
+// *********************************************************
+
 
 // if (typeof window == "undefined"){
 //   let boardMessed = new AIBoard(
@@ -318,34 +355,6 @@ function cpuPlayerInitialize(){
 //   console.log(score);
 // }
 
-// function sample(depth){
-//     if (depth === 0){
-//     return;
-//     }
-//     let branches = 6;
-//     branches = branches - (depth/2);
-
-//     for (let i = 0; i < branches; i++){
-//         new GameBoard;
-//         sample(depth - 1);
-//     }
-// }
-
-
-
-
-
-
-// Recursion
-// X(computer) will take the highest of the nodes
-// N(simulated human) will take the lowest of the nodes
-// If tie, doesn't matter
-// Branch ends at win/loss or max depth reached
-// Win = 100
-// Loss = -100
-// Tie = pick first
-// STRETCH = assign values to each space and include in node value
-// STRETCH = border spaces worth 4, center worth 7
 
 
 
@@ -361,83 +370,7 @@ function cpuPlayerInitialize(){
 
 
 
-// **************************
-// **** Jeremy's Playground*****
-// **************************
-
-// Valid Move Check
-// Input: Two element array for row and column
-// Output: Boolean value if the move was valid
-// function processMove(move){
-//   let row = move[0];
-//   let column = move[1];
-
-//   if (gameBoard[row][column].occupiedBy){
-//     return false;
-//   }
-
-//   let validMove = false;
-//   for (let i = 0; i < availableMoves.length; i++){
-//     if (availableMoves[i][0] === row && availableMoves[i][1] === column){
-//       validMove = true;
-//       break;
-//     }
-//   }
-//   if (!validMove){
-//     return false;
-//   }
-
-//   gameBoard[row][column].occupiedBy = currentPlayer;
-
-//   let newAvailableMoves = [];
-//   let fruit = gameBoard[row][column].fruit;
-//   let friend = gameBoard[row][column].friend;
-
-//   for (let i = 0; i < BOARD_WIDTH; i++){
-//     for (let j = 0; j < BOARD_WIDTH; j++){
-//       if (!gameBoard[i][j].occupiedBy && (gameBoard[i][j].fruit === fruit || gameBoard[i][j].friend === friend)){
-//         newAvailableMoves.push([i, j]);
-//       }
-//     }
-//   }
-//   availableMoves = newAvailableMoves;
-//   return true;
-// }
 
 
-// function cornerWin(){
 
-    // }
-    
-    // function sideWinR(){
-        
-    // }
-    
-    // function sideWinC(){
-    
-    // }
-    
-    // function centerWin(){
-    
-    // }
-    
-    // function AIEvaluateWin(space){
-    //     const row = Math.floor(space / BOARD_WIDTH);
-    //     const column = space % BOARD_WIDTH;
-    
-    //     if (AIBoard.board[row][column].occupiedBy === AIBoard.board[(row + 1)%4][column].occupiedBy === AIBoard.board[(row + 2)%4][column].occupiedBy === AIBoard.board[(row + 3)%4][column].occupiedBy){
-    //         return true;
-    //     }
-    //     if (AIBoard.board[row][column].occupiedBy === AIBoard.board[row][(column+1)%4].occupiedBy === AIBoard.board[row][(column+2)%4].occupiedBy === AIBoard.board[row][(column+3)%4].occupiedBy){
-    //         return true;
-    //     }
-    //     if ((row + column === 3) && AIBoard.linearBoard[3] === AIBoard.linearBoard[6] === AIBoard.linearBoard[9]===AIBoard.linearBoard[12]){
-    //         return true;
-    //     }
-    //     if ((row === column) && AIBoard.linearBoard[0] === AIBoard.linearBoard[5] === AIBoard.linearBoard[10] === AIBoard.linearBoard[15]){
-    //         return true;
-    //     }
-    
-    //     // Work in progress
-    
-    // }
+
