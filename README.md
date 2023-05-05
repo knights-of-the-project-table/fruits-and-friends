@@ -2,6 +2,9 @@
 
 Fruits and Friends is a fun game between two players that takes elements of pattern matching and strategy and combines them with cute animal friends and tasty fruits!
 
+## Live Site
+[Fruits and Friends](https://knights-of-the-project-table.github.io/fruits-and-friends/)
+
 ## Object of the Game
 
 The goal of the game is to achieve one of the following victory conditions:
